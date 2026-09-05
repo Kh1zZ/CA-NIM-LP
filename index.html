@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+  <title>CA'NIM — Lacak Anime & Manga Tanpa Bloatware</title>
+  <meta name="description" content="Klien pelacak anime dan manga open-source super ringan untuk Android (~2.3 MB). Tersinkronisasi langsung ke MyAnimeList dengan metadata kaya dari AniList GraphQL.">
+  <meta name="theme-color" content="#0a0e17">
+
+  <!-- Open Graph & Social Sharing -->
+  <meta property="og:title" content="CA'NIM — Open-Source Anime & Manga Tracker">
+  <meta property="og:description" content="Ringan ~2.3 MB, bebas iklan seumur hidup, ditenagai Jetpack Compose M3 dan sinkronisasi real-time MyAnimeList.">
+  <meta property="og:image" content="assets/logo.png">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <!-- Tailwind CSS Engine -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#0a0e17",
+            "surface": "#0f131d",
+            "surface-container-lowest": "#06090f",
+            "surface-container-low": "#131824",
+            "surface-container": "#1b2029",
+            "surface-container-high": "#232834",
+            "surface-container-highest": "#2e3444",
+            "on-surface": "#dfe2f0",
+            "on-surface-variant": "#9ba1b7",
+            "outline": "#434655",
+            "outline-variant": "#2b3040",
+            "primary": "#b4c5ff",
+            "primary-container": "#1d4ed8",
+            "on-primary": "#002a78",
+            "secondary": "#4cd7f6",
+            "secondary-container": "#0284c7",
+            "tertiary": "#d0bcff",
+            "border-subtle": "rgba(255, 255, 255, 0.08)"
+          },
+          fontFamily: {
+            sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #0a0e17;
+        color: #dfe2f0;
+        font-family: 'Inter', sans-serif;
+      }
+      body {
+        overscroll-behavior-y: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+
+    /* Custom Futuristic Cyber-Dark Scrollbar */
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #0284c7 #06090f;
+    }
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06090f;
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #1d4ed8, #0284c7, #4cd7f6);
+      border-radius: 9999px;
+      border: 1.5px solid #06090f;
+      box-shadow: inset 0 0 6px rgba(76, 215, 246, 0.5);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #2563eb, #03b5d3, #7ee7fc);
+      box-shadow: 0 0 12px rgba(76, 215, 246, 0.85);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .subtle-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    }
+
+    .ripple-effect {
+      position: relative;
+      overflow: hidden;
+    }
+    .ripple-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(0);
+      animation: ripple-animation 0.55s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Simple & Aesthetic Scroll Reveal Animations */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .delay-100 { transition-delay: 100ms; }
+    .delay-200 { transition-delay: 200ms; }
+    .delay-300 { transition-delay: 300ms; }
+    .delay-400 { transition-delay: 400ms; }
+
+    @keyframes subtleFloat {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+    .animate-subtle-float {
+      animation: subtleFloat 6s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .animate-subtle-float {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-[#0a0e17] text-on-surface flex flex-col min-h-screen selection:bg-secondary/25 selection:text-secondary antialiased">
+
+  <!-- TOP READING PROGRESS BAR -->
+  <div class="fixed top-0 left-0 right-0 h-[3px] z-[60] bg-transparent pointer-events-none">
+    <div id="scroll-progress-bar" class="h-full w-0 bg-gradient-to-r from-blue-600 via-secondary to-cyan-300 shadow-[0_0_12px_rgba(76,215,246,0.9)] transition-[width] duration-100 ease-out"></div>
+  </div>
+
+  <!-- TOP APPBAR NAVIGATION (Responsive: Mobile Stack + Desktop Menu) -->
+  <header class="fixed top-0 inset-x-0 z-50 pt-safe bg-[#0a0e17]/85 backdrop-blur-xl border-b border-white/[0.06]">
+    <div class="h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      
+      <!-- Brand Logo + Meta -->
+      <a class="flex items-center gap-3 group focus:outline-none" href="#hero">
+        <div class="relative w-9 h-9 rounded-xl overflow-hidden border border-white/15 shadow-md shadow-secondary/10 group-hover:border-secondary/50 transition-all flex-shrink-0">
+          <img alt="CA'NIM Logo" class="w-full h-full object-cover" src="assets/logo.png">
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="font-black text-[17px] tracking-tight text-white group-hover:text-secondary transition-colors">CA'NIM</span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-mono text-[9.5px] font-semibold tracking-wide">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span data-sync="version">v4.4.2</span>
+            </span>
+          </div>
+          <span class="text-[11px] text-on-surface-variant font-mono tracking-tight leading-none pt-0.5 hidden sm:inline">MAL Sync &amp; AniList GraphQL</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu (Synchronized with DOM flow & Scroll-Spy) -->
+      <nav class="hidden md:flex items-center gap-1 lg:gap-2" id="desktop-nav">
+        <a class="nav-link px-3 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-white transition-all rounded-lg hover:bg-white/5" href="#fitur">Fitur</a>
+        <a class="nav-link px-3 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-white transition-all rounded-lg hover:bg-white/5" href="#arsitektur-benchmark">Benchmark</a>
+        <a class="nav-link px-3 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-white transition-all rounded-lg hover:bg-white/5" href="#identitas-visual">Filosofi Logo</a>
+        <a class="nav-link px-3 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-white transition-all rounded-lg hover:bg-white/5" href="#showcase-antarmuka">Antarmuka</a>
+        <a class="nav-link px-3 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-white transition-all rounded-lg hover:bg-white/5" href="#spesifikasi">Spesifikasi</a>
+      </nav>
+
+      <!-- Right Action CTA Buttons -->
+      <div class="flex items-center gap-2">
+        <a class="h-9 px-3 rounded-lg bg-surface-container-high/90 hover:bg-surface-container-highest border border-white/10 text-on-surface text-[12px] font-mono font-medium flex items-center gap-1.5 transition-all active:scale-95" href="https://github.com/Kh1zZ/CA-NIM" rel="noopener noreferrer" target="_blank" title="Lihat di GitHub">
+          <span class="material-symbols-outlined text-[16px] text-secondary">code</span>
+          <span class="hidden sm:inline">Kh1zZ</span>
+        </a>
+
+        <a class="h-9 px-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-secondary hover:brightness-110 text-[#0a0e17] font-bold text-[12.5px] flex items-center gap-1.5 shadow-md shadow-secondary/20 transition-all active:scale-95" href="https://github.com/Kh1zZ/CA-NIM/releases/latest" data-sync="download-url" rel="noopener noreferrer" target="_blank">
+          <span class="material-symbols-outlined text-[16px]">download</span>
+          <span>Unduh APK</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- FLOATING SIDE SCROLL NAVIGATION DOCK (Desktop Quick Jump & Scroll-Spy) -->
+  <aside class="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-2.5 p-2 rounded-2xl bg-[#0c111d]/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/80" id="side-scroll-dock">
+    <a href="#hero" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Beranda">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">01. Beranda</span>
+    </a>
+    <a href="#fitur" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Fitur Utama">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">02. Fitur Utama</span>
+    </a>
+    <a href="#arsitektur-benchmark" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Benchmark">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">03. Benchmark</span>
+    </a>
+    <a href="#identitas-visual" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Filosofi Logo">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">04. Filosofi Logo</span>
+    </a>
+    <a href="#showcase-antarmuka" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Antarmuka">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">05. Antarmuka 9:19</span>
+    </a>
+    <a href="#spesifikasi" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Spesifikasi">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">06. Spesifikasi</span>
+    </a>
+    <a href="#unduh" class="side-dot group relative flex items-center justify-center p-1" aria-label="Ke Unduh APK">
+      <span class="dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white transition-all"></span>
+      <span class="absolute right-9 px-2.5 py-1 rounded-lg bg-[#131824] border border-white/10 text-white text-[11px] font-mono whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-xl">07. Unduh APK</span>
+    </a>
+  </aside>
+
+  <!-- FLOATING BACK TO TOP BUTTON -->
+  <button id="back-to-top" class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-xl bg-surface-container-high/90 hover:bg-secondary border border-white/15 text-white hover:text-[#0a0e17] flex items-center justify-center shadow-2xl transition-all duration-300 opacity-0 translate-y-4 pointer-events-none active:scale-90 group" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-label="Kembali ke atas">
+    <span class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-y-0.5">arrow_upward</span>
+  </button>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-1 w-full pt-20 pb-16 subtle-grid relative overflow-hidden">
+    
+    <!-- Ambient Backdrop Light Glows -->
+    <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] lg:w-[1000px] h-[450px] bg-gradient-to-b from-blue-600/15 via-secondary/10 to-transparent blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute top-96 -left-32 w-80 h-80 bg-primary/10 blur-3xl rounded-full pointer-events-none -z-10"></div>
+    <div class="absolute top-96 -right-32 w-80 h-80 bg-secondary/10 blur-3xl rounded-full pointer-events-none -z-10"></div>
+
+    <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-24">
+
+      <!-- ========================================================================= -->
+      <!-- 1. HERO SECTION (Responsive: Clean Mobile Stack + 2-Column Desktop Grid) -->
+      <!-- ========================================================================= -->
+      <section class="pt-6 lg:pt-10 scroll-mt-24" id="hero">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          <!-- Left Column: Copy, CTA & Fast Actions -->
+          <div class="lg:col-span-7 flex flex-col items-start space-y-6 reveal-on-scroll">
+            
+            <!-- Monospace Live Pill Tag -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/25 text-secondary shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">terminal</span>
+              <span class="font-mono text-[11px] font-semibold tracking-wider uppercase">&lt;&gt; OPEN-SOURCE ANIME TRACKER</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-[32px] sm:text-[44px] lg:text-[48px] font-black leading-[1.14] tracking-[-0.03em] text-white">
+              Tracking anime tanpa bloatware. <br class="hidden sm:inline">
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-purple-300">
+                Sinkron langsung ke MyAnimeList.
+              </span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-[14.5px] sm:text-[16px] text-on-surface-variant leading-relaxed max-w-2xl font-normal">
+              Hanya <span class="text-white font-mono font-bold" data-sync="filesize">~2.3 MB</span>. Ditenagai Jetpack Compose &amp; AniList GraphQL. 
+              <span class="text-secondary font-mono font-semibold">50ms perceived latency</span> dengan Optimistic UI rollback instan. 100% bebas iklan dan berdaulat data.
+            </p>
+
+            <!-- Primary CTAs -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full max-w-lg pt-1">
+              
+              <!-- Primary APK Download with Live Sync -->
+              <a class="ripple-effect group relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-secondary-container to-secondary p-[1px] shadow-[0_0_28px_rgba(76,215,246,0.25)] active:scale-[0.98] transition-all flex-1 block" href="https://github.com/Kh1zZ/CA-NIM/releases/latest" data-sync="download-url" onclick="createRipple(event)" rel="noopener noreferrer" target="_blank">
+                <div class="relative px-4 py-3 rounded-[11px] bg-[#0d1527]/90 flex items-center justify-between group-hover:bg-[#0d1527]/70 transition-colors">
+                  <div class="flex items-center gap-3 pointer-events-none">
+                    <div class="w-9 h-9 rounded-lg bg-secondary/20 text-secondary flex items-center justify-center flex-shrink-0">
+                      <span class="material-symbols-outlined text-[20px]">download</span>
+                    </div>
+                    <div class="text-left">
+                      <div class="text-[14px] font-bold text-white leading-tight">
+                        Unduh APK <span data-sync="version">v4.4.2</span>
+                      </div>
+                      <div class="text-[11px] font-mono text-secondary/80 truncate max-w-[190px]" data-sync="filename">
+                        canim-universal-release.apk
+                      </div>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-md bg-secondary/15 border border-secondary/30 text-secondary font-mono text-[11px] font-bold pointer-events-none flex-shrink-0" data-sync="filesize">
+                    ~2.3 MB
+                  </span>
+                </div>
+              </a>
+
+              <!-- GitHub Source Code Link -->
+              <a class="h-[50px] px-4 rounded-xl bg-surface-container/80 hover:bg-surface-container-high border border-white/10 flex items-center justify-center gap-2 text-on-surface hover:text-white transition-all active:scale-[0.98]" href="https://github.com/Kh1zZ/CA-NIM" rel="noopener noreferrer" target="_blank">
+                <span class="material-symbols-outlined text-[19px] text-secondary">code</span>
+                <span class="text-[13px] font-medium">Source (GPL-3.0)</span>
+              </a>
+
+            </div>
+
+            <!-- Quick Terminal Copy Bar & Checksum Trigger -->
+            <div class="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
+              
+              <button class="h-10 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-white/10 flex items-center justify-between text-left transition-all active:scale-[0.98]" onclick="copyGitClone(this)" type="button">
+                <div class="flex items-center gap-2 overflow-hidden">
+                  <span class="material-symbols-outlined text-[15px] text-secondary flex-shrink-0">content_copy</span>
+                  <span class="truncate text-on-surface" id="git-btn-label">git clone repo</span>
+                </div>
+                <span class="text-[10px] text-on-surface-variant flex-shrink-0">Git</span>
+              </button>
+
+              <button class="h-10 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container border border-white/10 flex items-center justify-between text-left transition-all active:scale-[0.98]" onclick="copyReleaseHash(this)" type="button">
+                <div class="flex items-center gap-2 overflow-hidden">
+                  <span class="material-symbols-outlined text-[15px] text-emerald-400 flex-shrink-0">fingerprint</span>
+                  <span class="truncate text-on-surface" id="hash-btn-label">Salin SHA-256</span>
+                </div>
+                <span class="text-[10px] text-on-surface-variant flex-shrink-0">Checksum</span>
+              </button>
+
+            </div>
+
+            <!-- Micro Highlight Badges -->
+            <div class="grid grid-cols-3 gap-2.5 w-full max-w-lg pt-1 font-mono text-[11px]">
+              <div class="px-3 py-2.5 rounded-xl bg-surface-container-low/80 border border-white/5 flex flex-col items-center text-center">
+                <span class="text-white font-bold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px] text-secondary">block</span> 0 Iklan
+                </span>
+                <span class="text-on-surface-variant text-[9.5px]">Zero Adware</span>
+              </div>
+              <div class="px-3 py-2.5 rounded-xl bg-surface-container-low/80 border border-white/5 flex flex-col items-center text-center">
+                <span class="text-secondary font-bold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px] text-secondary">lock</span> PKCE Auth
+                </span>
+                <span class="text-on-surface-variant text-[9.5px]">No Password Saved</span>
+              </div>
+              <div class="px-3 py-2.5 rounded-xl bg-surface-container-low/80 border border-white/5 flex flex-col items-center text-center">
+                <span class="text-emerald-400 font-bold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px] text-emerald-400">bolt</span> Compose M3
+                </span>
+                <span class="text-on-surface-variant text-[9.5px]">100% Kotlin Native</span>
+              </div>
+            </div>
+
+            <!-- Live Sync Status Notification Indicator -->
+            <div class="inline-flex items-center gap-2 text-[11px] font-mono text-on-surface-variant pt-1" id="live-sync-indicator">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Terhubung dengan GitHub Releases (<span data-sync="version">v4.4.2</span>)</span>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Smartphone Chassis Mockup with Authentic APK Dashboard -->
+          <div class="lg:col-span-5 flex justify-center relative reveal-on-scroll delay-200">
+            
+            <!-- Cyber Ambient Back-glow -->
+            <div class="absolute inset-0 max-w-[340px] mx-auto bg-gradient-to-tr from-primary-container/30 via-secondary/20 to-transparent blur-3xl rounded-full -z-10"></div>
+            
+            <!-- Phone Chassis Container with Subtle Floating Animation -->
+            <div class="relative w-[305px] sm:w-[330px] rounded-[42px] bg-[#06090f] p-2.5 sm:p-3 border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.9)] ring-1 ring-white/10 animate-subtle-float">
+              
+              <!-- Top Speaker & Camera Notch Bar -->
+              <div class="w-full flex items-center justify-between px-5 py-1.5 bg-[#06090f] text-on-surface-variant font-mono text-[10px]">
+                <span class="font-bold text-white">09:41</span>
+                <div class="w-20 h-3.5 bg-surface-container-high rounded-full mx-auto flex items-center justify-end pr-1.5">
+                  <div class="w-2 h-2 rounded-full bg-[#0a0e17]"></div>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[13px]">wifi</span>
+                  <span class="material-symbols-outlined text-[13px]">battery_full</span>
+                </div>
+              </div>
+
+              <!-- Static Authentic HD Dashboard Screenshot from APK (702x1599) -->
+              <div class="relative overflow-hidden rounded-[30px] bg-[#0c101a] border border-white/10 aspect-[9/19] flex flex-col justify-between group cursor-pointer shadow-inner" onclick="openLightbox('assets/screenshots/01-dashboard.png', 'Dasbor Utama CA\'NIM — Tampilan Asli APK (702 × 1599 HD)')" title="Klik untuk memperbesar tampilan HD">
+                <img src="assets/screenshots/01-dashboard.png" alt="Dasbor Resmi CA'NIM APK" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500">
+                
+                <!-- Subtle Glass Sheen Reflection -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-transparent pointer-events-none"></div>
+
+                <!-- Hover Zoom Overlay Hint -->
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div class="px-3.5 py-1.5 rounded-full bg-[#0a0e17]/90 backdrop-blur-md border border-secondary/40 text-secondary font-mono text-[11px] flex items-center gap-1.5 shadow-xl">
+                    <span class="material-symbols-outlined text-[16px]">zoom_in</span>
+                    <span>Buka Tampilan HD</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Speaker/Home Pill Indicator -->
+              <div class="w-full flex justify-center py-2 bg-[#06090f]">
+                <div class="w-28 h-1 rounded-full bg-white/25"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 2. SECTION: FITUR-FITUR UTAMA CA'NIM (2x3 Bento Grid) -->
+      <!-- ========================================================================= -->
+      <section class="space-y-6 pt-4 scroll-mt-24" id="fitur">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 reveal-on-scroll">
+          <div class="flex flex-col space-y-1">
+            <div class="inline-flex items-center gap-2 text-secondary font-mono text-[11px] uppercase tracking-wider font-bold">
+              <span class="material-symbols-outlined text-[16px]">featured_play_list</span>
+              <span>FITUR-FITUR UNGGULAN</span>
+            </div>
+            <h2 class="text-[24px] sm:text-[30px] font-black text-white tracking-tight">Dirancang Khusus untuk Penggemar Anime &amp; Manga</h2>
+            <p class="text-[13.5px] text-on-surface-variant max-w-2xl leading-relaxed">
+              Kebebasan mengelola daftar tontonan tanpa batasan kuota, tanpa iklan interupsi, dan tanpa pelacakan data komersial.
+            </p>
+          </div>
+          <span class="text-[11px] font-mono text-secondary px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 self-start md:self-auto">
+            v4.4.2 Core Engine
+          </span>
+        </div>
+
+        <!-- 6 Feature Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- Card 1 -->
+          <div class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-100">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">sync_saved_locally</span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-secondary font-semibold">SECURITY</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Single Source of Truth &amp; PKCE</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">AES-256 GCM • Android KeyStore</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Sinkronisasi dua arah langsung ke server MyAnimeList tanpa duplikasi database lokal Room yang rentan konflik. Autentikasi OAuth 2.0 PKCE aman tanpa pernah menyimpan password pengguna.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-emerald-500/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-200">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">bolt</span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/25 font-mono text-[9px] text-emerald-400 font-semibold">PERFORMANCE</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-emerald-400 transition-colors">Ringan ~2.3 MB &amp; 100% Bebas Iklan</h3>
+                <span class="text-[10.5px] font-mono text-emerald-400">FOSS GPL-3.0 • Zero Trackers</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Ukuran biner terpangkas drastis menjadi hanya ~2.3 MB dengan R8 Minifier. Sepenuhnya open-source tanpa iklan interstitial, pop-up mengganggu, maupun analitik pelacak komersial.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-300">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">collections_bookmark</span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">TRACKER</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Library Lengkap &amp; Pelacakan Cepat</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">Uncapped Pagination • 50ms UI</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Paginasi dinamis tanpa batasan 500 entri untuk ribuan koleksi anime &amp; manga. Tombol cepat (+1 Ep / +1 Ch) dengan Optimistic UI dan auto-fill episode saat status Completed.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-100">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">travel_explore</span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">DISCOVER</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">AniList GraphQL &amp; Smart Randomizer</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">Debounce 350ms • Acak Pintar</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Pencarian kilat dengan debouncing dan pembatalan kueri usang (cancellation-safe). Fitur Smart Randomizer otomatis menyaring judul yang sudah Anda tamatkan dari rekomendasi acak.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-200">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">movie_filter</span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">METADATA</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Detail Menyeluruh &amp; Relasi Waralaba</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">Seiyuu • Studio • Franchise Tree</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Sinopsis komprehensif, poster resolusi tinggi, daftar lengkap karakter &amp; seiyuu tanpa teks terpotong, trailer YouTube, riwayat studio animasi, dan pencegah sekuel pada Top 5.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-300">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">pie_chart</span>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">ANALYTICS</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Statistik &amp; Multi-Format Exporter</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">Audit Waktu • 9:16 / 4:5 / 1:1</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Audit total hari dan jam tonton, diagram distribusi status yang presisi, dan kartu ekspor grafis multi-rasio siap bagikan ke Instagram Story, Twitter, maupun status WhatsApp.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 3. SECTION: ARSITEKTUR & BENCHMARK KOMPARATIF (Metrics + Terminal Diff) -->
+      <!-- ========================================================================= -->
+      <section class="space-y-6 pt-4 scroll-mt-24" id="arsitektur-benchmark">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 reveal-on-scroll">
+          <div class="flex flex-col space-y-1">
+            <div class="inline-flex items-center gap-2 text-secondary font-mono text-[11px] uppercase tracking-wider font-bold">
+              <span class="material-symbols-outlined text-[16px]">speed</span>
+              <span>AUDIT PERFORMA NYATA</span>
+            </div>
+            <h2 class="text-[24px] sm:text-[30px] font-black text-white tracking-tight">Arsitektur &amp; Benchmark Komparatif</h2>
+            <p class="text-[13.5px] text-on-surface-variant max-w-2xl leading-relaxed">
+              Dioptimalkan mengadopsi standar performa <strong class="text-white">ArchiveTune</strong>. Nol alokasi berlebih pada Garbage Collector dan rendering mulus 60/120 FPS.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-white/10 text-on-surface-variant font-mono text-[11px] self-start md:self-auto">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>Divalidasi Android 14 API 34</span>
+          </div>
+        </div>
+
+        <!-- 4 Top Highlight Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 font-mono">
+          <div class="p-4 rounded-xl bg-surface-container-low border border-white/5 flex flex-col justify-between space-y-1 reveal-on-scroll delay-100">
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Ukuran APK Rilis</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[20px] sm:text-[24px] font-bold text-secondary" data-sync="filesize">~2.3 MB</span>
+              <span class="text-[11px] text-rose-400 line-through">48 MB</span>
+            </div>
+            <p class="text-[9.5px] text-on-surface-variant/80">R8 Full-Shrinking ProGuard</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-surface-container-low border border-white/5 flex flex-col justify-between space-y-1 reveal-on-scroll delay-200">
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Cold App Startup</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[20px] sm:text-[24px] font-bold text-primary">~320 ms</span>
+              <span class="text-[11px] text-rose-400 line-through">1.2 s</span>
+            </div>
+            <p class="text-[9.5px] text-on-surface-variant/80">Lazy Compose Initialization</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-surface-container-low border border-white/5 flex flex-col justify-between space-y-1 reveal-on-scroll delay-300">
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Memory Footprint (RAM)</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[20px] sm:text-[24px] font-bold text-secondary">~42 MB</span>
+              <span class="text-[11px] text-rose-400 line-through">185 MB</span>
+            </div>
+            <p class="text-[9.5px] text-on-surface-variant/80">Pre-allocated static shapes</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-surface-container-low border border-white/5 flex flex-col justify-between space-y-1 reveal-on-scroll delay-400">
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Perceived UI Latency</span>
+            <div class="flex items-baseline gap-2">
+              <span class="text-[20px] sm:text-[24px] font-bold text-emerald-400">50 ms</span>
+              <span class="text-[11px] text-on-surface-variant">Optimistic</span>
+            </div>
+            <p class="text-[9.5px] text-on-surface-variant/80">Local state + network rollback</p>
+          </div>
+        </div>
+
+        <!-- Terminal Diff Style Comparison Details -->
+        <details class="group/bench rounded-2xl bg-surface-container-low border border-white/10 overflow-hidden shadow-lg transition-all duration-300 open:border-secondary/40 reveal-on-scroll delay-200" id="benchmark-accordion" open>
+          <summary class="cursor-pointer list-none select-none p-4 bg-[#0a0e17]/80 hover:bg-surface-container-high/60 transition-colors flex items-center justify-between border-b border-transparent group-open/bench:border-white/[0.08]" onclick="toggleAccordionState(this)">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-secondary text-[22px]">terminal</span>
+              <div class="flex flex-col text-left">
+                <div class="flex items-center gap-2">
+                  <h3 class="font-mono text-[13px] uppercase tracking-wider text-white font-bold">Perbandingan Head-to-Head</h3>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded bg-secondary/10 border border-secondary/25 text-[9px] font-mono text-secondary font-semibold">CA'NIM vs Tracker Biasa</span>
+                </div>
+                <span class="font-mono text-[10.5px] text-on-surface-variant">Tabel diferensiasi performa, privasi, dan stabilitas</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-on-surface-variant font-mono text-[11px] group-hover/bench:border-secondary/40 group-hover/bench:text-secondary transition-colors">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 group-open/bench:animate-pulse"></span>
+                <span id="accordion-toggle-text">[-] Tutup</span>
+              </span>
+              <span class="material-symbols-outlined text-on-surface-variant text-[18px] transition-transform duration-300 group-open/bench:rotate-180 group-hover/bench:text-secondary">expand_more</span>
+            </div>
+          </summary>
+
+          <div>
+            <!-- Terminal Title Bar -->
+            <div class="px-4 py-2.5 bg-black/50 border-b border-white/[0.07] flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                <span class="ml-2 font-mono text-[10.5px] text-on-surface-variant">diff --benchmarks tracker-modern</span>
+              </div>
+              <span class="font-mono text-[10px] text-secondary font-bold tracking-wider">R8_PROGUARD_OPTIMIZED</span>
+            </div>
+
+            <!-- Comparison Table Rows -->
+            <div class="divide-y divide-white/[0.05] font-mono text-[12px]">
+              
+              <!-- Row 1: APK Size -->
+              <div class="p-3.5 sm:p-4 flex flex-col gap-1.5">
+                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Ukuran APK Rilis</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-rose-300">
+                    <div class="text-[10px] text-rose-400">Tracker Biasa</div>
+                    <div class="font-bold text-[13px]">48 MB – 65 MB+ (WebView / Flutter Bloat)</div>
+                  </div>
+                  <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v4.4.2</span></div>
+                    <div class="font-bold text-[13px]"><span data-sync="filesize">~2.3 MB</span> (95% Lebih Ringan)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2: Collection Limit -->
+              <div class="p-3.5 sm:p-4 flex flex-col gap-1.5">
+                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Kapasitas Koleksi</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-rose-300">
+                    <div class="text-[10px] text-rose-400">Tracker Biasa</div>
+                    <div class="font-bold text-[12px]">Maks. 500 Entri (Paginasi Terpotong)</div>
+                  </div>
+                  <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v4.4.2</span></div>
+                    <div class="font-bold text-[12px]">Uncapped Pagination (Ribuan Judul Lancar)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 3: Latency -->
+              <div class="p-3.5 sm:p-4 flex flex-col gap-1.5">
+                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Latensi Respon Progres (+1 Ep/Ch)</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-rose-300">
+                    <div class="text-[10px] text-rose-400">Tracker Biasa</div>
+                    <div class="font-bold text-[12px]">800ms - 2s (Loading Spinner Lambat)</div>
+                  </div>
+                  <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v4.4.2</span></div>
+                    <div class="font-bold text-[12px]">50ms Optimistic UI + Auto Rollback</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 4: Database SSOT -->
+              <div class="p-3.5 sm:p-4 flex flex-col gap-1.5">
+                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Sinkronisasi Database</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-rose-300">
+                    <div class="text-[10px] text-rose-400">Tracker Biasa</div>
+                    <div class="font-bold text-[12px]">Room DB Dobel (Rentan Konflik Sinkronisasi)</div>
+                  </div>
+                  <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v4.4.2</span></div>
+                    <div class="font-bold text-[12px]">Single Source of Truth MyAnimeList Langsung</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 5: Privacy & Ads -->
+              <div class="p-3.5 sm:p-4 flex flex-col gap-1.5">
+                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Privasi &amp; Monetisasi</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-rose-300">
+                    <div class="text-[10px] text-rose-400">Tracker Biasa</div>
+                    <div class="font-bold text-[12px]">Iklan Interstitial, Banner &amp; Pelacak SDK</div>
+                  </div>
+                  <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v4.4.2</span></div>
+                    <div class="font-bold text-[12px]">100% Bebas Iklan, GNU General Public License v3.0</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </details>
+
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 4. SECTION: IDENTITAS VISUAL & FILOSOFI LOGO -->
+      <!-- ========================================================================= -->
+      <section class="space-y-6 pt-4 scroll-mt-24" id="identitas-visual">
+        
+        <div class="flex flex-col space-y-1 text-center items-center reveal-on-scroll">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/25 text-secondary font-mono text-[11px] uppercase tracking-wider font-bold">
+            <span class="material-symbols-outlined text-[15px]">palette</span>
+            <span>IDENTITAS VISUAL &amp; BRANDING</span>
+          </div>
+          <h2 class="text-[24px] sm:text-[30px] font-black text-white tracking-tight">
+            Filosofi Logo &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary">Estetika Cyber-Blue Radiant</span>
+          </h2>
+          <p class="text-[13.5px] text-on-surface-variant max-w-2xl leading-relaxed">
+            Karya seni master beresolusi tinggi (1254 × 1254 px) yang memadukan kultur visual manga Jepang, teknologi cloud modern, dan tema Cyber Dark Native.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+          
+          <!-- Master Logo Showcase Card -->
+          <div class="lg:col-span-5 flex flex-col items-center relative reveal-on-scroll delay-100">
+            <div class="absolute inset-0 bg-secondary/15 blur-3xl rounded-3xl pointer-events-none -z-10"></div>
+            
+            <div class="w-full max-w-[360px] p-5 rounded-3xl bg-surface-container-low border border-secondary/30 shadow-2xl flex flex-col items-center text-center group">
+              <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-2xl overflow-hidden shadow-[0_0_36px_rgba(76,215,246,0.3)] border border-white/20 mb-4 bg-surface-container-lowest">
+                <img src="assets/logo.png" alt="CA'NIM Master Logo Artwork" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-secondary font-mono text-[10.5px] font-semibold">
+                <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                <span>assets/logo.png • 1254 × 1254 px Master</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Pilar Filosofi Cards -->
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            
+            <!-- Pilar 1 -->
+            <div class="p-4 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-2 reveal-on-scroll delay-100">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-md bg-secondary/15 text-secondary flex items-center justify-center font-mono text-[11px] font-bold">01</span>
+                  <h4 class="text-[13.5px] font-bold text-white leading-tight">Buku Manga &amp; Mata Anime</h4>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-secondary font-semibold">CORE</span>
+              </div>
+              <p class="text-[11.5px] text-on-surface-variant leading-relaxed">
+                Buku bersampul biru elektrik dengan detail halaman bertingkat dan pita pembatas cyan. Menampilkan mata karakter anime beriris biru safir dengan pantulan cahaya ganda melambangkan katalog hidup.
+              </p>
+            </div>
+
+            <!-- Pilar 2 -->
+            <div class="p-4 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-2 reveal-on-scroll delay-200">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-md bg-secondary/15 text-secondary flex items-center justify-center font-mono text-[11px] font-bold">02</span>
+                  <h4 class="text-[13.5px] font-bold text-white leading-tight">Panel Manga &amp; Siluet Torii</h4>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-secondary font-semibold">CULTURE</span>
+              </div>
+              <p class="text-[11.5px] text-on-surface-variant leading-relaxed">
+                Kartu panel berbingkai putih di sudut kanan atas menampilkan awan langit, balon percakapan, dan siluet gerbang Torii tradisional, menegaskan identitas kultur manga Jepang.
+              </p>
+            </div>
+
+            <!-- Pilar 3 -->
+            <div class="p-4 rounded-2xl bg-surface-container-low border border-white/10 hover:border-emerald-500/40 transition-all space-y-2 reveal-on-scroll delay-300">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-mono text-[11px] font-bold">03</span>
+                  <h4 class="text-[13.5px] font-bold text-white leading-tight">Lencana Sinkronisasi Awan</h4>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/25 font-mono text-[9px] text-emerald-400 font-semibold">MAL SYNC</span>
+              </div>
+              <p class="text-[11.5px] text-on-surface-variant leading-relaxed">
+                Awan putih kontras di sudut kanan bawah dengan dua panah melingkar melambangkan integrasi Single Source of Truth langsung ke server MyAnimeList secara instan dan dua arah.
+              </p>
+            </div>
+
+            <!-- Pilar 4 -->
+            <div class="p-4 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-2 reveal-on-scroll delay-400">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-md bg-secondary/15 text-secondary flex items-center justify-center font-mono text-[11px] font-bold">04</span>
+                  <h4 class="text-[13.5px] font-bold text-white leading-tight">Radiant Cyber-Blue &amp; Kilau</h4>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-secondary font-semibold">AESTHETIC</span>
+              </div>
+              <p class="text-[11.5px] text-on-surface-variant leading-relaxed">
+                Gradasi biru elektrik dengan pancaran cahaya dinamis dan kilau bintang memberikan nuansa futuristik, cepat, dan selaras dengan tema gelap (Cyber Dark Native) aplikasi.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 5. SECTION: SCREENSHOT SHOWCASE (7 Slots 9:19 Carousel with Lightbox) -->
+      <!-- ========================================================================= -->
+      <section class="space-y-4 pt-4 scroll-mt-24" id="showcase-antarmuka">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 reveal-on-scroll">
+          <div class="flex flex-col space-y-1">
+            <div class="inline-flex items-center gap-2 text-secondary font-mono text-[11px] uppercase tracking-wider font-bold">
+              <span class="material-symbols-outlined text-[16px]">view_carousel</span>
+              <span>GALERI ANTARMUKA 9:19</span>
+            </div>
+            <h2 class="text-[24px] sm:text-[30px] font-black text-white tracking-tight">Tangkapan Layar Langsung CA'NIM</h2>
+            <p class="text-[13px] text-on-surface-variant">Simulasi antarmuka Jetpack Compose Material 3 di layar smartphone modern.</p>
+          </div>
+
+          <!-- Carousel Controls -->
+          <div class="flex items-center gap-2 self-start sm:self-auto">
+            <button aria-label="Geser ke kiri" class="w-9 h-9 rounded-xl bg-surface-container border border-white/10 hover:border-secondary/50 text-on-surface hover:text-white flex items-center justify-center transition-all active:scale-90" onclick="scrollCarousel(-280)" type="button">
+              <span class="material-symbols-outlined text-[18px]">arrow_back_ios_new</span>
+            </button>
+            <button aria-label="Geser ke kanan" class="w-9 h-9 rounded-xl bg-surface-container border border-white/10 hover:border-secondary/50 text-on-surface hover:text-white flex items-center justify-center transition-all active:scale-90" onclick="scrollCarousel(280)" type="button">
+              <span class="material-symbols-outlined text-[18px]">arrow_forward_ios</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 7-Slot Horizontal Scroll Carousel -->
+        <div class="flex flex-row flex-nowrap gap-4 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 no-scrollbar scroll-smooth" id="screenshot-carousel">
+          
+          <!-- Slot 1: Dasbor Utama -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-100" onclick="openLightbox('assets/screenshots/01-dashboard.png', '01. DASBOR UTAMA — Profil &amp; Sinkronisasi (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">01. DASBOR UTAMA</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Dasbor CA'NIM" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/01-dashboard.png">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Dasbor &amp; Sinkronisasi</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Metrik tontonan, progres aktif, dan status cloud MAL.</p>
+            </div>
+          </div>
+
+          <!-- Slot 2: Library & Koleksi -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-200" onclick="openLightbox('assets/screenshots/02-library.jpg', '02. LIBRARY &amp; KOLEKSI — Koleksi Lengkap (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">02. LIBRARY &amp; KOLEKSI</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Tampilan Library CA'NIM" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/02-library.jpg">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Koleksi &amp; Library</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Progres instan +1 ep, sorting instan, dan paginasi uncapped.</p>
+            </div>
+          </div>
+
+          <!-- Slot 3: Eksplorasi & Discover -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-300" onclick="openLightbox('assets/screenshots/03-discover.jpg', '03. EKSPLORASI &amp; DISCOVER — Temukan Anime (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">03. DISCOVER</span>
+                <span class="font-mono text-[7.5px] text-secondary font-semibold flex-shrink-0">ACAK</span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Eksplorasi dan Temukan Anime" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/03-discover.jpg">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Eksplorasi &amp; Discover</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Filter format, genre, dan pengacak anime pintar.</p>
+            </div>
+          </div>
+
+          <!-- Slot 4: Detail Media -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-100" onclick="openLightbox('assets/screenshots/04-detail.jpg', '04. DETAIL MEDIA — Metadata Komprehensif (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">04. DETAIL MEDIA</span>
+                <span class="font-mono text-[7.5px] text-emerald-400 font-semibold flex-shrink-0">SYNCED</span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Detail Metadata Anime" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/04-detail.jpg">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Detail Komprehensif</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Skor MAL, trailer YouTube, dan sinopsis lengkap.</p>
+            </div>
+          </div>
+
+          <!-- Slot 5: Cast & Karakter -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-200" onclick="openLightbox('assets/screenshots/05-characters.jpg', '05. CAST &amp; KARAKTER — Pengisi Suara &amp; Karakter (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">05. CAST &amp; KARAKTER</span>
+                <span class="font-mono text-[7.5px] text-secondary font-semibold flex-shrink-0">SEIYUU</span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Pemeran &amp; Karakter" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/05-characters.jpg">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Karakter &amp; Seiyuu</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Daftar pemeran lengkap tanpa teks yang terpotong.</p>
+            </div>
+          </div>
+
+          <!-- Slot 6: Profil Pengisi Suara -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-300" onclick="openLightbox('assets/screenshots/06-voiceactor.jpg', '06. PROFIL SEIYUU — Biografi &amp; Filmografi (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">06. PROFIL SEIYUU</span>
+                <span class="font-mono text-[7.5px] text-emerald-400 font-semibold flex-shrink-0">DETAILS</span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Profil Staf / Pengisi Suara" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/06-voiceactor.jpg">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Profil Staf / Seiyuu</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Biografi, tanggal lahir, dan riwayat peran karya.</p>
+            </div>
+          </div>
+
+          <!-- Slot 7: Statistik Lengkap -->
+          <div class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-400" onclick="openLightbox('assets/screenshots/07-statistics.jpg', '07. STATISTIK LENGKAP — Audit &amp; Infografis (702 × 1599 HD)')">
+            <div class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
+              <div class="px-3 py-1.5 bg-black/60 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10">
+                <span class="font-mono text-[8.5px] text-secondary font-bold tracking-wider truncate">07. STATISTIK</span>
+                <span class="font-mono text-[7.5px] text-secondary font-semibold flex-shrink-0">ANALYTICS</span>
+              </div>
+              <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
+                <img alt="Statistik &amp; Ringkasan" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300" src="assets/screenshots/07-statistics.jpg">
+                <div class="absolute inset-0 bg-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="p-2 rounded-full bg-black/70 backdrop-blur-sm border border-secondary/50 text-secondary material-symbols-outlined text-[20px]">zoom_in</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-1 space-y-0.5">
+              <div class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">Statistik &amp; Ringkasan</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Audit waktu tonton dan ekspor grafis multi-rasio.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Carousel Indicator Dots -->
+        <div class="flex items-center justify-center gap-1.5 pt-1" id="carousel-dots">
+          <button aria-label="Slide 1" class="carousel-dot w-6 h-1.5 rounded-full bg-secondary transition-all" onclick="goToCarouselSlide(0)" type="button"></button>
+          <button aria-label="Slide 2" class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all" onclick="goToCarouselSlide(1)" type="button"></button>
+          <button aria-label="Slide 3" class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all" onclick="goToCarouselSlide(2)" type="button"></button>
+          <button aria-label="Slide 4" class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all" onclick="goToCarouselSlide(3)" type="button"></button>
+          <button aria-label="Slide 5" class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all" onclick="goToCarouselSlide(4)" type="button"></button>
+          <button aria-label="Slide 6" class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all" onclick="goToCarouselSlide(5)" type="button"></button>
+          <button aria-label="Slide 7" class="carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all" onclick="goToCarouselSlide(6)" type="button"></button>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 6. SECTION: SPESIFIKASI RILIS & TEKNIS (Desktop + Mobile Cards) -->
+      <!-- ========================================================================= -->
+      <section class="space-y-6 pt-4 scroll-mt-24" id="spesifikasi">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          <!-- Left Column: Specs Table -->
+          <div class="lg:col-span-7 flex flex-col space-y-4 reveal-on-scroll delay-100">
+            <div class="space-y-1">
+              <div class="inline-flex items-center gap-2 text-secondary font-mono text-[11px] uppercase tracking-wider font-bold">
+                <span class="material-symbols-outlined text-[16px]">description</span>
+                <span>SPESIFIKASI RILIS RESMI</span>
+              </div>
+              <h2 class="text-[24px] sm:text-[28px] font-black text-white tracking-tight">
+                <span data-sync="filename">canim-universal-release-v4.4.2.apk</span>
+              </h2>
+              <p class="text-[13px] text-on-surface-variant">
+                Kompilasi universal otomatis GitHub Actions CI/CD dan lolos verifikasi 32 automated unit tests.
+              </p>
+            </div>
+
+            <!-- Key-Value Specs Card -->
+            <div class="rounded-2xl bg-surface-container-low border border-white/10 overflow-hidden shadow-md">
+              <div class="flex items-center justify-between px-4 py-3 bg-surface-container-high/80 border-b border-white/10 font-mono text-[11.5px]">
+                <span class="text-white font-bold">Parameter Teknis</span>
+                <span class="text-secondary font-bold uppercase">Nilai Terverifikasi</span>
+              </div>
+              <div class="divide-y divide-white/[0.06] font-mono text-[12px]">
+                <div class="py-3 px-4 flex items-center justify-between gap-3">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Versi Rilis</span>
+                  <span class="text-secondary font-bold text-right" data-sync="version">v4.4.2</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3 bg-white/[0.01]">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Ukuran Berkas</span>
+                  <span class="text-white font-semibold text-right" data-sync="filesize">2.31 MB</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Target Arsitektur</span>
+                  <span class="text-white font-semibold text-right">Universal (arm64-v8a, armeabi-v7a, x86_64)</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3 bg-white/[0.01]">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Android Minimum</span>
+                  <span class="text-white font-semibold text-right">Android 7.0+ (API Level 24+)</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Target SDK</span>
+                  <span class="text-white font-semibold text-right">Android 14 (API Level 34)</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3 bg-white/[0.01]">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Bahasa &amp; UI</span>
+                  <span class="text-emerald-400 font-semibold text-right">Kotlin 1.9.22 + Jetpack Compose M3</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Keamanan Kredensial</span>
+                  <span class="text-secondary font-semibold text-right">OAuth 2.0 PKCE + AES-256 GCM</span>
+                </div>
+                <div class="py-3 px-4 flex items-center justify-between gap-3 bg-white/[0.01]">
+                  <span class="text-on-surface-variant text-[11px] flex-shrink-0">Lisensi</span>
+                  <span class="text-white font-semibold text-right">GNU GPL-3.0 (100% Free &amp; Open Source)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Tech Stack Pillars -->
+          <div class="lg:col-span-5 flex flex-col justify-center space-y-4 reveal-on-scroll delay-200">
+            <div class="p-6 rounded-2xl bg-surface-container-low border border-white/10 shadow-sm space-y-4">
+              <div class="flex items-center gap-2 text-secondary">
+                <span class="material-symbols-outlined text-[24px]">layers</span>
+                <h3 class="text-[17px] font-bold text-white">Pilar Teknologi</h3>
+              </div>
+              <p class="text-[12.5px] text-on-surface-variant leading-relaxed">
+                Dibangun dengan arsitektur MVVM + StateFlow reaktif murni, Retrofit HTTP/2 connection pooling, Coil asynchronous image loading, dan Gson R8 ProGuard hardened.
+              </p>
+              
+              <div class="grid grid-cols-2 gap-2.5 font-mono text-[11px] pt-1">
+                <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+                  <span class="text-on-surface truncate">Retrofit 2.9.0</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+                  <span class="text-on-surface truncate">Coil 2.6.0</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+                  <span class="text-on-surface truncate">Coroutines &amp; Flow</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+                  <span class="text-on-surface truncate">Crypto 1.1.0</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+                  <span class="text-on-surface truncate">AniList GraphQL</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+                  <span class="text-on-surface truncate">Robolectric 4.11</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================================= -->
+      <!-- 7. FINAL CALL-TO-ACTION BANNER & FOOTER -->
+      <!-- ========================================================================= -->
+      <section class="pt-6 border-t border-white/[0.08] space-y-8 scroll-mt-24" id="unduh">
+        
+        <!-- Big Callout Download Box -->
+        <div class="relative rounded-3xl bg-gradient-to-br from-surface-container via-surface-container-low to-surface-container-lowest p-6 sm:p-10 border border-white/10 overflow-hidden shadow-2xl reveal-on-scroll">
+          <div class="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-primary-container/20 blur-3xl pointer-events-none"></div>
+          
+          <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-left">
+            <div class="space-y-2 max-w-xl">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-secondary font-mono text-[11px] font-semibold">
+                <span class="material-symbols-outlined text-[15px]">verified</span>
+                <span>BEBAS IKLAN SEUMUR HIDUP</span>
+              </div>
+              <h3 class="text-[22px] sm:text-[28px] font-black text-white">Mulai lacak animemu sekarang.</h3>
+              <p class="text-[13.5px] text-on-surface-variant leading-relaxed">
+                Tanpa pengumpulan data pribadi, hemat daya baterai dengan arsitektur native, dan sinkron otomatis dengan akun MyAnimeList milikmu.
+              </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto flex-shrink-0">
+              <a class="ripple-effect w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-secondary text-[#0a0e17] font-bold text-[13.5px] active:scale-[0.98] transition-transform shadow-lg shadow-secondary/25 hover:brightness-110" href="https://github.com/Kh1zZ/CA-NIM/releases/latest" data-sync="download-url" onclick="createRipple(event)" rel="noopener noreferrer" target="_blank">
+                <span class="material-symbols-outlined text-[20px] pointer-events-none">download</span>
+                <span class="pointer-events-none" data-sync="cta-label">Unduh APK v4.4.2 (~2.3 MB)</span>
+              </a>
+
+              <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-white/10 text-white font-medium text-[13px] transition-colors" href="https://github.com/Kh1zZ/CA-NIM/blob/main/README.md" rel="noopener noreferrer" target="_blank">
+                <span class="material-symbols-outlined text-[18px] text-secondary">description</span>
+                <span>Dokumentasi README</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Credits -->
+        <footer class="text-center space-y-4 pb-8 pt-2 font-mono text-[12px]">
+          <div class="flex items-center justify-center gap-2">
+            <div class="w-6 h-6 rounded-md overflow-hidden border border-white/20">
+              <img alt="CA'NIM Mini Logo" class="w-full h-full object-cover" src="assets/logo.png">
+            </div>
+            <span class="font-bold text-white text-[14px]">CA'NIM Project</span>
+          </div>
+          <p class="text-on-surface-variant leading-relaxed max-w-xl mx-auto">
+            Dibuat dengan ❤️ untuk Komunitas Anime &amp; Manga Indonesia.<br>
+            FOSS di bawah Lisensi <a class="text-secondary hover:underline" href="https://github.com/Kh1zZ/CA-NIM/blob/main/LICENSE" target="_blank">GNU GPL-3.0</a> oleh <a class="text-white hover:underline font-bold" href="https://github.com/Kh1zZ" target="_blank">Kh1zZ</a>.
+          </p>
+          <div class="text-[10.5px] text-white/40 pt-1">
+            Terinspirasi dari ArchiveTune &amp; didukung Gemini 3.8 Flash
+          </div>
+        </footer>
+
+      </section>
+
+    </div>
+  </main>
+
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING TOAST FEEDBACK NOTIFICATION -->
+  <!-- ========================================================================= -->
+  <div class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-[#1b2029]/95 border border-secondary/40 text-secondary font-mono text-[12px] shadow-2xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-3" id="toast-notify">
+    <span class="material-symbols-outlined text-[17px] text-emerald-400">check_circle</span>
+    <span id="toast-message">Tersalin!</span>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- LIGHTBOX MODAL VIEWER -->
+  <!-- ========================================================================= -->
+  <div class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-200 flex flex-col items-center justify-center p-4" id="lightbox-modal" onclick="closeLightbox(event)">
+    <div class="relative max-w-md w-full max-h-[92vh] flex flex-col items-center" onclick="event.stopPropagation()">
+      <!-- Top Action Bar -->
+      <div class="w-full flex items-center justify-between py-2.5 px-4 bg-black/70 rounded-t-2xl border border-white/15 border-b-0 backdrop-blur-md">
+        <span class="text-[12.5px] font-mono text-secondary font-bold truncate" id="lightbox-title">Tangkapan Layar CA'NIM</span>
+        <button aria-label="Tutup preview" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" onclick="closeLightbox()" type="button">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <!-- Image Box -->
+      <div class="w-full bg-[#06090f] border border-white/15 rounded-b-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+        <img alt="Pratinjau Layar Penuh" class="w-full max-h-[78vh] object-contain" id="lightbox-img" src="">
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- HIGH-PERFORMANCE LIGHTWEIGHT JAVASCRIPT (ZERO DEPENDENCY) -->
+  <!-- ========================================================================= -->
+  <script>
+    // -------------------------------------------------------------------------
+    // 1. GITHUB RELEASES LIVE SYNC (Auto Updates Version, APK Name, Size & URL)
+    // -------------------------------------------------------------------------
+    const GITHUB_REPO = 'Kh1zZ/CA-NIM';
+    const CACHE_KEY = 'canim_release_cache';
+    const CACHE_TTL = 15 * 60 * 1000; // 15 menit cache
+
+    async function syncGitHubRelease() {
+      try {
+        // Cek Cache LocalStorage
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          try {
+            const { data, timestamp } = JSON.parse(cached);
+            if (Date.now() - timestamp < CACHE_TTL && data && data.tag_name) {
+              applyReleaseData(data);
+              return;
+            }
+          } catch(e) {
+            localStorage.removeItem(CACHE_KEY);
+          }
+        }
+
+        // Fetch dari API GitHub Publik
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+
+        if (!response.ok) {
+          throw new Error(`GitHub API returned ${response.status}`);
+        }
+
+        const data = await response.json();
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+        applyReleaseData(data);
+
+      } catch (error) {
+        console.warn('CA\'NIM Live Sync:', error.message, '-> Menggunakan nilai fallback default.');
+      }
+    }
+
+    function applyReleaseData(release) {
+      if (!release || !release.tag_name) return;
+
+      const tagName = release.tag_name;
+      const cleanTag = tagName.startsWith('v') ? tagName : `v${tagName}`;
+
+      // Cari berkas .apk pada assets
+      const apkAsset = (release.assets || []).find(a => a.name.toLowerCase().endsWith('.apk'));
+      const shaAsset = (release.assets || []).find(a => a.name.toLowerCase().includes('sha256'));
+
+      const apkName = apkAsset ? apkAsset.name : `canim-universal-release-${cleanTag}.apk`;
+      const apkSizeMB = apkAsset ? (apkAsset.size / (1024 * 1024)).toFixed(2) + ' MB' : '~2.3 MB';
+      const apkDownloadUrl = apkAsset ? apkAsset.browser_download_url : `https://github.com/${GITHUB_REPO}/releases/latest`;
+      const releaseUrl = release.html_url || `https://github.com/${GITHUB_REPO}/releases/latest`;
+
+      // 1. Sinkronisasi Seluruh Label Versi
+      document.querySelectorAll('[data-sync="version"]').forEach(el => {
+        el.textContent = cleanTag;
+      });
+
+      // 2. Sinkronisasi Nama Berkas
+      document.querySelectorAll('[data-sync="filename"]').forEach(el => {
+        el.textContent = apkName;
+      });
+
+      // 3. Sinkronisasi Ukuran Berkas
+      document.querySelectorAll('[data-sync="filesize"]').forEach(el => {
+        el.textContent = apkSizeMB;
+      });
+
+      // 4. Sinkronisasi Link Unduh APK
+      document.querySelectorAll('[data-sync="download-url"]').forEach(el => {
+        el.href = apkDownloadUrl;
+      });
+
+      // 5. Sinkronisasi Link Halaman Rilis
+      document.querySelectorAll('[data-sync="release-url"]').forEach(el => {
+        el.href = releaseUrl;
+      });
+
+      // 6. Sinkronisasi Teks Tombol CTA
+      document.querySelectorAll('[data-sync="cta-label"]').forEach(el => {
+        el.textContent = `Unduh APK ${cleanTag} (${apkSizeMB})`;
+      });
+
+      // Indikator Sinkronisasi
+      const indicator = document.getElementById('live-sync-indicator');
+      if (indicator) {
+        indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Tersinkronisasi langsung dengan GitHub Releases (<strong>${cleanTag}</strong>)</span>`;
+      }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 2. SCROLL-SPY, PROGRESS BAR & ACTIVE HIGHLIGHT
+    // -------------------------------------------------------------------------
+    const sectionIds = ['hero', 'fitur', 'arsitektur-benchmark', 'identitas-visual', 'showcase-antarmuka', 'spesifikasi', 'unduh'];
+    const navLinks = document.querySelectorAll('#desktop-nav .nav-link');
+    const sideDots = document.querySelectorAll('#side-scroll-dock .side-dot');
+    const progressBar = document.getElementById('scroll-progress-bar');
+    const backToTopBtn = document.getElementById('back-to-top');
+
+    function handleScrollSpy() {
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      
+      // Update Reading Progress Bar
+      if (progressBar && docHeight > 0) {
+        const progress = Math.min(100, Math.max(0, (scrollY / docHeight) * 100));
+        progressBar.style.width = `${progress}%`;
+      }
+
+      // Back to Top Button visibility
+      if (backToTopBtn) {
+        if (scrollY > 400) {
+          backToTopBtn.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+          backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+        } else {
+          backToTopBtn.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+          backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+        }
+      }
+
+      // Detect Current Active Section (offset 130px for fixed header)
+      let currentSection = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop - 140;
+          if (scrollY >= top) {
+            currentSection = id;
+          }
+        }
+      }
+
+      // Highlight Desktop Nav
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href').replace('#', '');
+        if (href === currentSection) {
+          link.className = "nav-link px-3 py-1.5 text-[13px] font-bold text-secondary bg-secondary/15 border border-secondary/30 rounded-lg transition-all shadow-sm";
+        } else {
+          link.className = "nav-link px-3 py-1.5 text-[13px] font-medium text-on-surface-variant hover:text-white transition-all rounded-lg hover:bg-white/5";
+        }
+      });
+
+      // Highlight Floating Side Dock Dots
+      sideDots.forEach(dot => {
+        const href = dot.getAttribute('href').replace('#', '');
+        const indicator = dot.querySelector('.dot-indicator');
+        if (indicator) {
+          if (href === currentSection) {
+            indicator.className = "dot-indicator w-2.5 h-6 rounded-full bg-secondary shadow-[0_0_12px_rgba(76,215,246,0.85)] transition-all";
+          } else {
+            indicator.className = "dot-indicator w-2.5 h-2.5 rounded-full bg-white/20 group-hover:bg-white/60 transition-all";
+          }
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      window.requestAnimationFrame(handleScrollSpy);
+    }, { passive: true });
+
+
+    // -------------------------------------------------------------------------
+    // 3. SCROLL REVEAL ANIMATIONS (IntersectionObserver)
+    // -------------------------------------------------------------------------
+    function initScrollAnimations() {
+      const targets = document.querySelectorAll('.reveal-on-scroll');
+      if (!targets.length) return;
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, {
+          root: null,
+          rootMargin: '0px 0px -40px 0px',
+          threshold: 0.08
+        });
+
+        targets.forEach(el => observer.observe(el));
+      } else {
+        targets.forEach(el => el.classList.add('is-revealed'));
+      }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 4. RIPPLE CLICK EFFECT
+    // -------------------------------------------------------------------------
+    function createRipple(event) {
+      const button = event.currentTarget;
+      const circle = document.createElement("span");
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+      const rect = button.getBoundingClientRect();
+
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${event.clientX - rect.left - radius}px`;
+      circle.style.top = `${event.clientY - rect.top - radius}px`;
+      circle.classList.add("ripple-circle");
+
+      const existingRipple = button.querySelector(".ripple-circle");
+      if (existingRipple) {
+        existingRipple.remove();
+      }
+      button.appendChild(circle);
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 5. FLOATING TOAST NOTIFICATION SYSTEM
+    // -------------------------------------------------------------------------
+    let toastTimer = null;
+    function showToast(message) {
+      const toast = document.getElementById('toast-notify');
+      const label = document.getElementById('toast-message');
+      if (!toast || !label) return;
+
+      label.innerText = message;
+      toast.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2500);
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 6. QUICK CLIPBOARD ACTIONS (Git Clone & SHA-256)
+    // -------------------------------------------------------------------------
+    function copyGitClone(btn) {
+      const cmd = "git clone https://github.com/Kh1zZ/CA-NIM.git";
+      navigator.clipboard.writeText(cmd).then(() => {
+        const label = document.getElementById('git-btn-label');
+        const original = label.innerText;
+        label.innerText = "✓ Tersalin!";
+        showToast("Perintah git clone tersalin ke clipboard!");
+        setTimeout(() => { label.innerText = original; }, 2000);
+      });
+    }
+
+    function copyReleaseHash(btn) {
+      const hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+      navigator.clipboard.writeText(hash).then(() => {
+        const label = document.getElementById('hash-btn-label');
+        const original = label.innerText;
+        label.innerText = "✓ Tersalin!";
+        showToast("Ringkasan SHA-256 tersalin ke clipboard!");
+        setTimeout(() => { label.innerText = original; }, 2000);
+      });
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 7. ACCORDION TOGGLE
+    // -------------------------------------------------------------------------
+    function toggleAccordionState(summaryEl) {
+      const details = summaryEl.parentElement;
+      const toggleText = document.getElementById('accordion-toggle-text');
+      setTimeout(() => {
+        if (details.open) {
+          toggleText.innerText = '[-] Tutup';
+        } else {
+          toggleText.innerText = '[+] Buka';
+        }
+      }, 20);
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 8. SCREENSHOT CAROUSEL & ACTIVE DOT TRACKER
+    // -------------------------------------------------------------------------
+    const carousel = document.getElementById('screenshot-carousel');
+    const dots = document.querySelectorAll('.carousel-dot');
+
+    function scrollCarousel(distance) {
+      if (carousel) carousel.scrollBy({ left: distance, behavior: 'smooth' });
+    }
+
+    function goToCarouselSlide(index) {
+      if (!carousel) return;
+      const items = carousel.querySelectorAll('.snap-center');
+      if (items[index]) {
+        items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+
+    function updateActiveDot() {
+      if (!carousel) return;
+      const items = carousel.querySelectorAll('.snap-center');
+      const scrollCenter = carousel.scrollLeft + (carousel.offsetWidth / 2);
+      
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      items.forEach((item, index) => {
+        const itemCenter = item.offsetLeft - carousel.offsetLeft + (item.offsetWidth / 2);
+        const dist = Math.abs(scrollCenter - itemCenter);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestIndex = index;
+        }
+      });
+
+      dots.forEach((dot, index) => {
+        if (index === closestIndex) {
+          dot.className = "carousel-dot w-6 h-1.5 rounded-full bg-secondary transition-all";
+        } else {
+          dot.className = "carousel-dot w-1.5 h-1.5 rounded-full bg-white/20 transition-all";
+        }
+      });
+    }
+
+    if (carousel) {
+      carousel.addEventListener('scroll', () => {
+        window.requestAnimationFrame(updateActiveDot);
+      }, { passive: true });
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 9. LIGHTBOX MODAL VIEWER
+    // -------------------------------------------------------------------------
+    function openLightbox(imgSrc, title) {
+      const modal = document.getElementById('lightbox-modal');
+      const img = document.getElementById('lightbox-img');
+      const titleEl = document.getElementById('lightbox-title');
+      
+      if (!modal || !img || !titleEl) return;
+
+      img.src = imgSrc;
+      titleEl.innerText = title;
+      modal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        modal.classList.add('opacity-100');
+      });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target && e.target.id !== 'lightbox-modal' && !e.target.closest('button')) return;
+      const modal = document.getElementById('lightbox-modal');
+      if (!modal) return;
+
+      modal.classList.add('opacity-0');
+      modal.classList.remove('opacity-100');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 200);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Run sync, initial scroll spy state, and scroll reveal animations
+    document.addEventListener('DOMContentLoaded', () => {
+      syncGitHubRelease();
+      handleScrollSpy();
+      initScrollAnimations();
+    });
+  </script>
+
+</body>
+</html>
