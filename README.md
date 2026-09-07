@@ -7,7 +7,7 @@ Landing Page resmi berkecepatan tinggi untuk aplikasi **[CA'NIM (Kh1zZ/CA-NIM)](
 - **Tech Stack Ultra-Ringan**: Dibuat dengan HTML5 murni, Tailwind CSS, dan Vanilla JavaScript tanpa dependensi framework yang berat.
 - **100% Responsif & Mobile-First**: Dioptimalkan secara mulus untuk tampilan smartphone (tata letak vertikal) hingga monitor desktop (2-kolom layout).
 - **Mockup Interaktif**: Simulasi smartphone dengan HUD card tombol cepat progres episode (`+1 Ep`).
-- **Galeri Tangkapan Layar 9:19 & Lightbox**: 7 slot tangkapan layar antarmuka asli dengan slider horizontal dan pratinjau resolusi tinggi (Lightbox Modal).
+- **Galeri Tangkapan Layar 9:19 & Lightbox**: 9 slot tangkapan layar antarmuka asli dengan slider horizontal dan pratinjau resolusi tinggi (Lightbox Modal).
 - **Audit & Benchmark**: Tabel komparatif visual antara CA'NIM vs aplikasi pelacak konvensional.
 
 ## 📦 Menjalankan Secara Lokal

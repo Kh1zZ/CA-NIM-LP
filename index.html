@@ -4,9 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
-  <title>CA'NIM — Lacak Anime & Manga Tanpa Bloatware (v5.1.1)</title>
+  <title>CA'NIM — Lacak Anime & Manga Tanpa Bloatware (v6.1.5)</title>
   <meta name="description"
-    content="Klien pelacak anime dan manga open-source super ringan untuk Android (~2.3 MB). Tersinkronisasi langsung ke MyAnimeList dengan metadata kaya dari AniList GraphQL.">
+    content="Klien pelacak anime dan manga open-source super ringan untuk Android (~2.3 MB). Arsitektur Dual-Engine MyAnimeList & AniList GraphQL, Happy Eyeballs RFC 8305, zero-network cold start, 65 unit tests passing, dan 100% bebas iklan seumur hidup.">
   <meta name="theme-color" content="#0a0e17">
 
   <!-- Canonical Link -->
@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://canim-lp.vercel.app/">
   <meta property="og:site_name" content="CA'NIM">
   <meta property="og:title" content="CA'NIM — Open-Source Anime & Manga Tracker">
-  <meta property="og:description" content="Klien pelacak anime & manga super ringan untuk Android (~2.3 MB). 100% bebas iklan seumur hidup, ditenagai Jetpack Compose M3, Flashcard Gacha interaktif, direktori 35+ Studio, dan sinkronisasi real-time MyAnimeList.">
+  <meta property="og:description" content="Klien pelacak anime & manga super ringan untuk Android (~2.3 MB). 100% bebas iklan seumur hidup, ditenagai Jetpack Compose M3, arsitektur Dual-Engine (MAL + AniList GraphQL) berkeandalan tinggi, Flashcard Gacha berkeadilan, direktori 35+ Studio, dan transisi popout halus.">
   <meta property="og:image" content="https://canim-lp.vercel.app/assets/og-image.png">
   <meta property="og:image:secure_url" content="https://canim-lp.vercel.app/assets/og-image.png">
   <meta property="og:image:type" content="image/png">
@@ -29,7 +29,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://canim-lp.vercel.app/">
   <meta name="twitter:title" content="CA'NIM — Open-Source Anime & Manga Tracker">
-  <meta name="twitter:description" content="Klien pelacak anime & manga super ringan untuk Android (~2.3 MB). 100% bebas iklan seumur hidup, ditenagai Jetpack Compose M3, Flashcard Gacha interaktif, direktori 35+ Studio, dan sinkronisasi real-time MyAnimeList.">
+  <meta name="twitter:description" content="Klien pelacak anime & manga super ringan untuk Android (~2.3 MB). 100% bebas iklan seumur hidup, ditenagai Jetpack Compose M3, arsitektur Dual-Engine (MAL + AniList GraphQL) berkeandalan tinggi, Flashcard Gacha berkeadilan, direktori 35+ Studio, dan transisi popout halus.">
   <meta name="twitter:image" content="https://canim-lp.vercel.app/assets/og-image.png">
   <meta name="twitter:image:alt" content="Pratinjau Resmi CA'NIM — Open-Source Anime & Manga Tracker">
 
@@ -92,7 +92,7 @@
             <span
               class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-mono text-[9px] sm:text-[9.5px] font-semibold tracking-wide whitespace-nowrap">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span data-sync="version">v5.1.1</span>
+              <span data-sync="version">v6.1.5</span>
             </span>
           </div>
           <span
@@ -237,10 +237,8 @@
 
             <!-- Subtitle -->
             <p class="text-[14px] sm:text-[16px] text-on-surface-variant leading-relaxed max-w-2xl font-normal">
-              Hanya <span class="text-white font-mono font-bold" data-sync="filesize">2.36 MB</span>. Ditenagai Jetpack
-              Compose &amp; AniList GraphQL.
-              <span class="text-secondary font-mono font-semibold">50ms perceived latency</span> dengan Optimistic UI
-              rollback instan. 100% bebas iklan dan berdaulat data.
+              Hanya <span class="text-white font-mono font-bold" data-sync="filesize">2.36 MB</span>. Arsitektur Dual-Engine (MAL + AniList GraphQL) &amp; Jetpack Compose M3.
+              <span class="text-secondary font-mono font-semibold">Zero-Network Cold Start</span> dengan Happy Eyeballs RFC 8305. 100% bebas iklan dan 65 automated tests.
             </p>
 
             <!-- Primary CTAs -->
@@ -248,7 +246,7 @@
 
               <!-- Primary APK Download with Live Sync -->
               <a class="ripple-effect group relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-secondary-container to-secondary p-[1px] shadow-[0_0_28px_rgba(76,215,246,0.25)] active:scale-[0.98] transition-all flex-1 block"
-                href="https://github.com/Kh1zZ/CA-NIM/releases/download/v5.1.1/canim-universal-release-v5.1.1.apk"
+                href="https://github.com/Kh1zZ/CA-NIM/releases/download/v6.1.5/canim-universal-release-v6.1.5.apk"
                 data-sync="download-url" onclick="createRipple(event)" rel="noopener noreferrer" target="_blank">
                 <div
                   class="relative px-3.5 sm:px-4 py-3 rounded-[11px] bg-[#0d1527]/90 flex items-center justify-between group-hover:bg-[#0d1527]/70 transition-colors gap-2">
@@ -259,12 +257,12 @@
                     </div>
                     <div class="text-left min-w-0">
                       <div class="text-[13px] sm:text-[14px] font-bold text-white leading-tight truncate">
-                        Unduh APK <span data-sync="version">v5.1.1</span>
+                        Unduh APK <span data-sync="version">v6.1.5</span>
                       </div>
                       <div
                         class="text-[10px] sm:text-[11px] font-mono text-secondary/80 truncate max-w-[170px] sm:max-w-[200px]"
                         data-sync="filename">
-                        canim-universal-release-v5.1.1.apk
+                        canim-universal-release-v6.1.5.apk
                       </div>
                     </div>
                   </div>
@@ -331,7 +329,7 @@
                 <span class="text-emerald-400 font-bold flex items-center gap-1 text-[10.5px] sm:text-[11px]">
                   <span class="material-symbols-outlined text-[14px] text-emerald-400">bolt</span> Compose M3
                 </span>
-                <span class="text-on-surface-variant text-[9px] sm:text-[9.5px]">57 Unit Tests Passed</span>
+                <span class="text-on-surface-variant text-[9px] sm:text-[9.5px]">65 Unit Tests Passed</span>
               </div>
             </div>
 
@@ -339,7 +337,7 @@
             <div class="inline-flex items-center gap-2 text-[11px] font-mono text-on-surface-variant pt-1"
               id="live-sync-indicator">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>Terhubung dengan GitHub Releases (<span data-sync="version">v5.1.1</span>)</span>
+              <span>Terhubung dengan GitHub Releases (<span data-sync="version">v6.1.5</span>)</span>
             </div>
 
           </div>
@@ -370,15 +368,15 @@
                 </div>
               </div>
 
-              <!-- Static Authentic HD Dashboard Screenshot from APK (v5.1.1 449x1024) -->
+              <!-- Static Authentic HD Dashboard Screenshot from APK (v6.1.5 449x1024) -->
               <div
                 class="relative overflow-hidden rounded-[30px] bg-[#0c101a] border border-white/10 aspect-[9/19] flex flex-col justify-between group cursor-pointer shadow-inner"
-                onclick="openLightbox('assets/screenshots/01-dashboard-v511.webp', 'Dasbor Utama CA\'NIM v5.1.1 — Tampilan Asli APK (Online Sync, Ringkasan Statistik &amp; Gacha Banner)')"
+                onclick="openLightbox('assets/screenshots/01-dashboard-v511.webp', 'Dasbor Utama CA\'NIM v6.1.5 — Tampilan Asli APK (Dual-Engine Sync, Ringkasan Statistik &amp; Gacha Banner)')"
                 title="Klik untuk memperbesar tampilan HD">
                 <img src="assets/screenshots/01-dashboard-v511-sm.webp"
                   srcset="assets/screenshots/01-dashboard-v511-sm.webp 360w, assets/screenshots/01-dashboard-v511.webp 449w"
                   sizes="(max-width: 640px) 280px, 330px"
-                  alt="Dasbor Resmi CA'NIM APK v5.1.1" width="360" height="821"
+                  alt="Dasbor Resmi CA'NIM APK v6.1.5" width="360" height="821"
                   fetchpriority="high" decoding="async"
                   class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500">
 
@@ -412,7 +410,7 @@
 
 
       <!-- ========================================================================= -->
-      <!-- 2. SECTION: FITUR-FITUR UTAMA CA'NIM (2x3 Bento Grid v5.1.1) -->
+      <!-- 2. SECTION: FITUR-FITUR UTAMA CA'NIM (2x3 Bento Grid v6.1.5) -->
       <!-- ========================================================================= -->
       <section class="space-y-6 pt-4 scroll-mt-24" id="fitur">
 
@@ -421,7 +419,7 @@
             <div
               class="inline-flex items-center gap-2 text-secondary font-mono text-[11px] uppercase tracking-wider font-bold">
               <span class="material-symbols-outlined text-[16px]">featured_play_list</span>
-              <span>FITUR-FITUR UNGGULAN v5.1.1</span>
+              <span>FITUR-FITUR UNGGULAN v6.1.5</span>
             </div>
             <h2 class="text-[24px] sm:text-[30px] font-black text-white tracking-tight">Dirancang Khusus untuk Penggemar
               Anime &amp; Manga</h2>
@@ -432,142 +430,141 @@
           </div>
           <span
             class="text-[11px] font-mono text-secondary px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 self-start md:self-auto">
-            <span data-sync="version">v5.1.1</span> Core Engine
+            <span data-sync="version">v6.1.5</span> Dual-Engine Core
           </span>
         </div>
 
         <!-- 6 Feature Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-          <!-- Card 1: Flashcard Gacha Rekomendasi (NEW in v5.1) -->
+          <!-- Card 1: Dual-Engine Synchronization & Fast Failover (BARU v6.1) -->
           <div
             class="p-5 rounded-2xl bg-surface-container-low border border-secondary/30 hover:border-secondary/60 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-100 shadow-sm shadow-secondary/5">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">swap_calls</span>
+                </div>
+                <span
+                  class="px-2 py-0.5 rounded bg-secondary/15 border border-secondary/30 font-mono text-[9px] text-secondary font-bold">BARU v6.1</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Dual-Engine Sync
+                  &amp; Fast Failover</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">MAL SSOT • AniList GraphQL • Happy Eyeballs</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Sinergi dua mesin tanpa duplikasi database Room lokal: MyAnimeList sebagai Single Source of Truth untuk status tracking, skor, dan riwayat; AniList GraphQL untuk metadata kaya, poster HD, dan database studio. Didukung fast fallback (RFC 8305 IPv4/IPv6 racing) dan batas waktu agresif 6s/8s untuk transisi mulus saat jaringan ISP tersendat.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: Zero-Network Cold Start & SWR Caching (BARU v6.1) -->
+          <div
+            class="p-5 rounded-2xl bg-surface-container-low border border-secondary/30 hover:border-secondary/60 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-200 shadow-sm shadow-secondary/5">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">offline_bolt</span>
+                </div>
+                <span
+                  class="px-2 py-0.5 rounded bg-secondary/15 border border-secondary/30 font-mono text-[9px] text-secondary font-bold">BARU v6.1</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Zero-Network
+                  Cold Start &amp; SWR</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">SWR 30-Min • Disk LRU &lt; 10ms • HTTP 30MB</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Stale-While-Revalidate (SWR) Library Cache mengeliminasi jeda cold start pada saat membuka aplikasi. Dilengkapi Disk-backed LRU Cache (&lt; 10 ms), Multi-Key In-Memory LRU (0 ms), deduplikasi request bersamaan (ConcurrentHashMap), dan pemutakhiran bertahap (incremental diff-only metadata enrichment).
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3: Fluid Continuity & Popout Spring Animations (BARU v6.1.5) -->
+          <div
+            class="p-5 rounded-2xl bg-surface-container-low border border-secondary/30 hover:border-secondary/60 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-300 shadow-sm shadow-secondary/5">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between">
+                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[22px]">auto_awesome_motion</span>
+                </div>
+                <span
+                  class="px-2 py-0.5 rounded bg-secondary/15 border border-secondary/30 font-mono text-[9px] text-secondary font-bold">BARU v6.1.5</span>
+              </div>
+              <div>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Popout Detail
+                  &amp; Fluid Continuity</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">Spring ScaleIn 0.88f • Scroll Memory Map</span>
+              </div>
+              <p class="text-[12px] text-on-surface-variant leading-relaxed">
+                Transisi modal detail fullscreen berbasis pegas fisika halus (scaleIn 0.88f + fadeIn 220ms) tanpa loncatan glitch pojok layar. Fitur detailScrollPositions secara presisi mengingat posisi dan offset scroll saat bolak-balik melihat relasi anime (prequel, sequel, spin-off). Bilah navigasi dan selektor ditenagai SmoothSegmentedSelector.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 4: Flashcard Gacha Berkeadilan & Anti-Abuse (v6.1) -->
+          <div
+            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-100">
             <div class="space-y-3">
               <div class="flex items-start justify-between">
                 <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
                   <span class="material-symbols-outlined text-[22px]">style</span>
                 </div>
                 <span
-                  class="px-2 py-0.5 rounded bg-secondary/15 border border-secondary/30 font-mono text-[9px] text-secondary font-bold">BARU v5.1</span>
+                  class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-secondary font-semibold">v6.1 RULES</span>
               </div>
               <div>
                 <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Flashcard Gacha
-                  &amp; Sistem Tiket</h3>
-                <span class="text-[10.5px] font-mono text-secondary/90">Spring Physics • Tumpukan UNO • 5 Tiket/Minggu</span>
+                  Berkeadilan</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">Pembalikan 100% Gratis • 5 Tiket/Minggu</span>
               </div>
               <p class="text-[12px] text-on-surface-variant leading-relaxed">
-                Eksplorasi anime acak bergaya kartu fisik interaktif dengan animasi swipe fisika pegas (spring physics). Dilengkapi tombol instan Simpan ke Rencana Tontonan (*Plan to Watch*) dan kuota 5 tiket mingguan (floor min 5, +1 tiket tiap selesai menonton) dengan proteksi anti-exploit.
+                Eksplorasi anime acak bergaya tumpukan kartu UNO dengan swipe fisika pegas. Pembalikan kartu untuk melihat sinopsis &amp; rekomendasi 100% bebas biaya tiket (kuota hanya berkurang saat disimpan atau dibuang). Dilengkapi baseline tracking anti-exploit kuota dan floor minimum 5 tiket setiap Senin.
               </p>
             </div>
           </div>
 
-          <!-- Card 2: Studio Details & Filmography (NEW in v5.1) -->
+          <!-- Card 5: Studio Details & Direktori Filmografi -->
           <div
-            class="p-5 rounded-2xl bg-surface-container-low border border-secondary/30 hover:border-secondary/60 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-200 shadow-sm shadow-secondary/5">
+            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-200">
             <div class="space-y-3">
               <div class="flex items-start justify-between">
                 <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
                   <span class="material-symbols-outlined text-[22px]">movie</span>
                 </div>
                 <span
-                  class="px-2 py-0.5 rounded bg-secondary/15 border border-secondary/30 font-mono text-[9px] text-secondary font-bold">BARU v5.1</span>
+                  class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">ENSIKLOPEDIA</span>
               </div>
               <div>
-                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Studio Details
-                  &amp; Live Search</h3>
-                <span class="text-[10.5px] font-mono text-secondary/90">35+ Studio Kurasi • 30-Day Cache • Timeline Rilis</span>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Direktori 35+
+                  Studio &amp; TBA</h3>
+                <span class="text-[10.5px] font-mono text-secondary/90">35+ Studio Legendaris • 30-Day Cache</span>
               </div>
               <p class="text-[12px] text-on-surface-variant leading-relaxed">
-                Ensiklopedia &amp; filmografi komprehensif 35+ studio legendaris (MAPPA, ufotable, KyoAni, Bones, Doga Kobo, dll) dengan data faktual tahun berdiri, negara, total anime, dan link resmi. Dilengkapi *Live Studio Search* via GraphQL AniList dan pengelompokan tahun rilis dinamis (judul TBA di puncak).
+                Ensiklopedia mendalam studio anime Jepang (ufotable, MAPPA, KyoAni, Bones, Doga Kobo, dll.) dengan data faktual tahun berdiri, negara, total rilisan, dan tautan resmi. Dilengkapi live search studio dan pengelompokan tahun rilis dinamis yang menempatkan judul TBA (akan datang) di posisi teratas.
               </p>
             </div>
           </div>
 
-          <!-- Card 3: Ekspor Statistik Multi-Rasio & Top 5 Non-Sekuel -->
+          <!-- Card 6: Ekspor Statistik Multi-Rasio & Privasi FOSS -->
           <div
-            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-300">
-            <div class="space-y-3">
-              <div class="flex items-start justify-between">
-                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
-                  <span class="material-symbols-outlined text-[22px]">share</span>
-                </div>
-                <span
-                  class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">ANALYTICS</span>
-              </div>
-              <div>
-                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Ekspor Multi-Rasio
-                  &amp; Anti-Sekuel</h3>
-                <span class="text-[10.5px] font-mono text-secondary/90">9:16 / 4:5 / 1:1 • PDF/JPG/PNG • Pie Chart</span>
-              </div>
-              <p class="text-[12px] text-on-surface-variant leading-relaxed">
-                Ekspor infografis koleksi resolusi tinggi dalam 5 rasio fleksibel (9:16 Story, 4:5, 3:4, 1:1, 16:9 Landscape) dengan cover anti-stretch. Algoritma pintar *AnimeFranchiseFilter* otomatis memisahkan sekuel waralaba agar Top 5 tidak dimonopoli anime yang sama.
-              </p>
-            </div>
-          </div>
-
-          <!-- Card 4: Single Source of Truth & PKCE -->
-          <div
-            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-100">
-            <div class="space-y-3">
-              <div class="flex items-start justify-between">
-                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
-                  <span class="material-symbols-outlined text-[22px]">sync_saved_locally</span>
-                </div>
-                <span
-                  class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-secondary font-semibold">SECURITY</span>
-              </div>
-              <div>
-                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Single Source
-                  of Truth &amp; PKCE</h3>
-                <span class="text-[10.5px] font-mono text-secondary/90">AES-256 GCM • Android KeyStore</span>
-              </div>
-              <p class="text-[12px] text-on-surface-variant leading-relaxed">
-                Sinkronisasi dua arah langsung ke server MyAnimeList tanpa duplikasi database lokal Room yang rentan
-                konflik. Autentikasi OAuth 2.0 PKCE aman tanpa pernah menyimpan password pengguna.
-              </p>
-            </div>
-          </div>
-
-          <!-- Card 5: Performa ArchiveTune & 0 ms Cache -->
-          <div
-            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-emerald-500/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-200">
+            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-emerald-500/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-300">
             <div class="space-y-3">
               <div class="flex items-start justify-between">
                 <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                  <span class="material-symbols-outlined text-[22px]">bolt</span>
+                  <span class="material-symbols-outlined text-[22px]">share</span>
                 </div>
                 <span
-                  class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/25 font-mono text-[9px] text-emerald-400 font-semibold">PERFORMANCE</span>
+                  class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/25 font-mono text-[9px] text-emerald-400 font-semibold">ANALYTICS &amp; PRIVACY</span>
               </div>
               <div>
-                <h3 class="text-[15px] font-bold text-white group-hover:text-emerald-400 transition-colors">Standar
-                  ArchiveTune &amp; 0 ms Cache</h3>
-                <span class="text-[10.5px] font-mono text-emerald-400">Multi-Key LRU • Skippable • ~2.3 MB</span>
+                <h3 class="text-[15px] font-bold text-white group-hover:text-emerald-400 transition-colors">Ekspor
+                  Multi-Rasio &amp; FOSS</h3>
+                <span class="text-[10.5px] font-mono text-emerald-400">Rasio 9:16 &amp; 16:9 • AES-256 GCM • ~2.3 MB</span>
               </div>
               <p class="text-[12px] text-on-surface-variant leading-relaxed">
-                Multi-key in-memory LRU caching (Canonical, AniList ID, MAL ID) dengan render instan 0 ms saat navigasi balik. 100% skippable recomposition, shape statis pre-allocated, biner R8 hanya ~2.3 MB, dan 0 iklan.
-              </p>
-            </div>
-          </div>
-
-          <!-- Card 6: Update Checker & Smart Maintenance -->
-          <div
-            class="p-5 rounded-2xl bg-surface-container-low border border-white/10 hover:border-secondary/40 transition-all space-y-3 flex flex-col justify-between group reveal-on-scroll delay-300">
-            <div class="space-y-3">
-              <div class="flex items-start justify-between">
-                <div class="w-10 h-10 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
-                  <span class="material-symbols-outlined text-[22px]">system_update</span>
-                </div>
-                <span
-                  class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-on-surface-variant font-semibold">MAINTENANCE</span>
-              </div>
-              <div>
-                <h3 class="text-[15px] font-bold text-white group-hover:text-secondary transition-colors">Auto Update
-                  &amp; Smart Cleaner</h3>
-                <span class="text-[10.5px] font-mono text-secondary/90">GitHub Releases API • Disk Cleaners</span>
-              </div>
-              <p class="text-[12px] text-on-surface-variant leading-relaxed">
-                Pengecek rilis baru GitHub Releases in-app otomatis tiap 24 jam dengan semver comparator. Dilengkapi pembersih mandiri disk cache gambar Coil &amp; metadata GraphQL AniList, serta guard anti-overflow episode/chapter.
+                Hasilkan infografis statistik tontonan siap bagi dalam rasio 9:16 Story atau 16:9 Landscape dengan pie chart genre dan penyaring AnimeFranchiseFilter. Kredensial akun terlindungi di Android KeyStore AES256-GCM. 100% bebas iklan seumur hidup di bawah lisensi GNU GPL-3.0 dengan ukuran APK ramping ~2.3 MB.
               </p>
             </div>
           </div>
@@ -600,7 +597,7 @@
           <div
             class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-white/10 text-on-surface-variant font-mono text-[11px] self-start md:self-auto">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Divalidasi Android 14 API 34 • 57 Tests Passed</span>
+            <span>Divalidasi Android 14 API 34 • 65 Tests Passed</span>
           </div>
         </div>
 
@@ -623,7 +620,7 @@
               <span class="text-[20px] sm:text-[24px] font-bold text-primary">~320 ms</span>
               <span class="text-[11px] text-rose-400 line-through">1.2 s</span>
             </div>
-            <p class="text-[9.5px] text-on-surface-variant/80">Lazy Compose Initialization</p>
+            <p class="text-[9.5px] text-on-surface-variant/80">Zero-Network SWR Cache</p>
           </div>
 
           <div
@@ -633,17 +630,72 @@
               <span class="text-[20px] sm:text-[24px] font-bold text-secondary">~42 MB</span>
               <span class="text-[11px] text-rose-400 line-through">185 MB</span>
             </div>
-            <p class="text-[9.5px] text-on-surface-variant/80">Pre-allocated static shapes</p>
+            <p class="text-[9.5px] text-on-surface-variant/80">Coil RGB_565 Decoding (-50%)</p>
           </div>
 
           <div
             class="p-3 sm:p-4 rounded-xl bg-surface-container-low border border-white/5 flex flex-col justify-between space-y-1 reveal-on-scroll delay-400">
             <span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Perceived UI Latency</span>
             <div class="flex items-baseline gap-2">
-              <span class="text-[20px] sm:text-[24px] font-bold text-emerald-400">50 ms</span>
-              <span class="text-[11px] text-on-surface-variant">Optimistic</span>
+              <span class="text-[20px] sm:text-[24px] font-bold text-emerald-400">&lt; 10 ms</span>
+              <span class="text-[11px] text-on-surface-variant">Disk LRU</span>
             </div>
-            <p class="text-[9.5px] text-on-surface-variant/80">Local state + network rollback</p>
+            <p class="text-[9.5px] text-on-surface-variant/80">Instant synthesis + Disk cache</p>
+          </div>
+        </div>
+
+        <!-- Dual-Engine Architecture Box (v6.1.5) -->
+        <div class="p-5 sm:p-6 rounded-2xl bg-surface-container-low border border-white/10 space-y-4 reveal-on-scroll delay-150">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary text-[22px]">account_tree</span>
+              <h3 class="text-[16px] font-bold text-white">Arsitektur Sinkronisasi Dual-Engine (RFC 8305)</h3>
+            </div>
+            <span class="font-mono text-[10.5px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md self-start sm:self-auto">
+              Single Source of Truth + High-Throughput Batching
+            </span>
+          </div>
+          <div class="overflow-x-auto no-scrollbar">
+            <pre class="font-mono text-[10.5px] sm:text-[11px] text-on-surface leading-relaxed p-4 rounded-xl bg-black/50 border border-white/5 whitespace-pre">
+┌─────────────────────────────────────────────────────────────────┐
+│                       CA'NIM Client UI                          │
+│        (Jetpack Compose M3 + 100% Skippable Recomposition)      │
+└────────────────┬───────────────────────────────▲────────────────┘
+                 │ (Mutasi Tracking)             │ (Observasi StateFlow)
+                 ▼                               │
+┌────────────────────────────────┐ ┌──────────────────────────────┐
+│         CanimViewModel         │ │         CacheManager         │
+│  (Optimistic UI + Rollback)    │ │   (Disk &amp; In-Memory LRU,     │
+└────────────────┬───────────────┘ │    SWR Cache, TTL 30 Menit)  │
+                 │                 └─────────────▲────────────────┘
+                 ▼                               │
+┌────────────────────────────────────────────────┴────────────────┐
+│                        CanimRepository                          │
+│      (Dual-Engine Coordination &amp; Fast Failover RFC 8305)        │
+├────────────────────────────────┬────────────────────────────────┤
+│    [ENGINE A: USER TRACKING]   │     [ENGINE B: RICH METADATA]  │
+│               ▼                │                ▼               │
+│        MyAnimeList API         │        AniList GraphQL         │
+│   - Single Source of Truth     │   - Primary Metadata Provider  │
+│   - OAuth 2.0 PKCE (Hardware)  │   - High-throughput Batching   │
+│   - Bidirectional Mutations    │   - MediaResolver (MAL ID Map) │
+│   - Full Uncapped Pagination   │   - Cast, Crew &amp; Studio Engine │
+│   - Score &amp; Status Authority   │   - Multi-Tier Disk/Memory LRU │
+└────────────────────────────────┴────────────────────────────────┘</pre>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-[11px] pt-1">
+            <div class="p-3 rounded-lg bg-surface-container border border-white/5 space-y-1">
+              <span class="text-secondary font-bold">Fast Fallback (RFC 8305)</span>
+              <p class="text-[10px] text-on-surface-variant leading-relaxed">Happy Eyeballs balapan rute IPv4/IPv6 mengeliminasi delay 250ms+ saat jaringan seluler/ISP lambat.</p>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container border border-white/5 space-y-1">
+              <span class="text-emerald-400 font-bold">Timeout Agresif 6s / 8s</span>
+              <p class="text-[10px] text-on-surface-variant leading-relaxed">Batas koneksi 6 detik &amp; baca 8 detik seketika beralih ke fallback MAL jika AniList terhambat.</p>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container border border-white/5 space-y-1">
+              <span class="text-primary font-bold">Coil RGB_565 (-50% RAM)</span>
+              <p class="text-[10px] text-on-surface-variant leading-relaxed">Decoding Coil RGB_565 memangkas 50% konsumsi RAM bitmap dan meniadakan freeze Garbage Collection.</p>
+            </div>
           </div>
         </div>
 
@@ -711,7 +763,7 @@
                       Bloat)</div>
                   </div>
                   <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
-                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v5.1.1</span></div>
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v6.1.5</span></div>
                     <div class="font-bold text-[12.5px] sm:text-[13px] leading-snug"><span data-sync="filesize">2.36
                         MB</span> (95% Lebih Ringan)</div>
                   </div>
@@ -727,7 +779,7 @@
                     <div class="font-bold text-[12px] leading-snug">Maks. 500 Entri (Paginasi Terpotong)</div>
                   </div>
                   <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
-                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v5.1.1</span></div>
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v6.1.5</span></div>
                     <div class="font-bold text-[12px] leading-snug">Uncapped Pagination (Ribuan Judul Lancar)</div>
                   </div>
                 </div>
@@ -743,23 +795,23 @@
                     <div class="font-bold text-[12px] leading-snug">800ms - 2s (Loading Spinner Lambat)</div>
                   </div>
                   <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
-                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v5.1.1</span></div>
-                    <div class="font-bold text-[12px] leading-snug">50ms Optimistic UI + Auto Rollback</div>
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v6.1.5</span></div>
+                    <div class="font-bold text-[12px] leading-snug">&lt; 10ms Disk LRU + 50ms Optimistic UI</div>
                   </div>
                 </div>
               </div>
 
               <!-- Row 4: Database SSOT -->
               <div class="p-3.5 sm:p-4 flex flex-col gap-1.5">
-                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Sinkronisasi Database</div>
+                <div class="text-[11px] uppercase tracking-wider text-on-surface-variant">Arsitektur Sinkronisasi</div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-rose-300">
                     <div class="text-[10px] text-rose-400">Tracker Biasa</div>
                     <div class="font-bold text-[12px] leading-snug">Room DB Dobel (Rentan Konflik Sinkronisasi)</div>
                   </div>
                   <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
-                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v5.1.1</span></div>
-                    <div class="font-bold text-[12px] leading-snug">Single Source of Truth MyAnimeList Langsung</div>
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v6.1.5</span></div>
+                    <div class="font-bold text-[12px] leading-snug">Dual-Engine Sinergi (MAL SSOT + AniList Metadata)</div>
                   </div>
                 </div>
               </div>
@@ -773,7 +825,7 @@
                     <div class="font-bold text-[12px] leading-snug">Iklan Interstitial, Banner &amp; Pelacak SDK</div>
                   </div>
                   <div class="p-2.5 rounded bg-secondary/10 border border-secondary/30 text-secondary">
-                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v5.1.1</span></div>
+                    <div class="text-[10px] text-secondary/80">CA'NIM <span data-sync="version">v6.1.5</span></div>
                     <div class="font-bold text-[12px] leading-snug">100% Bebas Iklan, GNU General Public License v3.0
                     </div>
                   </div>
@@ -951,15 +1003,15 @@
           </div>
         </div>
 
-        <!-- 9-Slot Horizontal Scroll Carousel (v5.1.1) -->
+        <!-- 9-Slot Horizontal Scroll Carousel (v6.1.5) -->
         <div
           class="flex flex-row flex-nowrap gap-4 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 no-scrollbar scroll-smooth"
           id="screenshot-carousel">
 
-          <!-- Slot 1: Dasbor Utama (v5.1.1) -->
+          <!-- Slot 1: Dasbor Utama (v6.1.5) -->
           <div
             class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-100"
-            onclick="openLightbox('assets/screenshots/01-dashboard-v511.webp', '01. DASBOR UTAMA (v5.1.1) — Online Status, Ringkasan Statistik &amp; Banner Gacha (449 × 1024 HD)')">
+            onclick="openLightbox('assets/screenshots/01-dashboard-v511.webp', '01. DASBOR UTAMA (v6.1.5) — Online Status, Outage Banner &amp; Compact Hero Metrics (449 × 1024 HD)')">
             <div
               class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
               <div
@@ -968,7 +1020,7 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
               </div>
               <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
-                <img alt="Dasbor CA'NIM v5.1.1"
+                <img alt="Dasbor CA'NIM v6.1.5"
                   class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300"
                   src="assets/screenshots/01-dashboard-v511-sm.webp" srcset="assets/screenshots/01-dashboard-v511-sm.webp 360w, assets/screenshots/01-dashboard-v511.webp 449w" sizes="(max-width: 640px) 240px, 260px" width="360" height="821" loading="lazy" decoding="async">
                 <div
@@ -981,15 +1033,15 @@
             <div class="px-1 space-y-0.5">
               <div
                 class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">
-                Dasbor &amp; Statistik v5.1.1</div>
-              <p class="text-[10.5px] text-on-surface-variant leading-tight">Metrik tontonan/bacaan, status Online, dan banner Flashcard Gacha.</p>
+                Dasbor &amp; Statistik v6.1.5</div>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Metrik tontonan ringkas, status sinkronisasi aktif, deteksi gangguan API, dan banner Gacha.</p>
             </div>
           </div>
 
-          <!-- Slot 2: Flashcard Gacha Rekomendasi (NEW v5.1) -->
+          <!-- Slot 2: Flashcard Gacha Rekomendasi (v6.1 RULES) -->
           <div
             class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-150"
-            onclick="openLightbox('assets/screenshots/08-flashcard.webp', '02. FLASHCARD GACHA (v5.1.1) — Swipe Rekomendasi Bergaya UNO &amp; 5 Tiket Mingguan (449 × 1024 HD)')">
+            onclick="openLightbox('assets/screenshots/08-flashcard.webp', '02. FLASHCARD GACHA (v6.1.5) — Swipe Rekomendasi Bergaya UNO &amp; Pembalikan Bebas Tiket (449 × 1024 HD)')">
             <div
               class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-secondary/30 overflow-hidden shadow-lg group-hover:border-secondary/70 transition-all flex flex-col">
               <div
@@ -1012,14 +1064,14 @@
               <div
                 class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">
                 Flashcard Gacha</div>
-              <p class="text-[10.5px] text-on-surface-variant leading-tight">Swipe kartu anime gaya UNO, animasi fisika pegas &amp; kuota tiket mingguan.</p>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Pembalikan gratis tanpa tiket, konsumsi hanya pada save/discard, dan anti-abuse.</p>
             </div>
           </div>
 
-          <!-- Slot 3: Studio Details & Filmography (NEW v5.1) -->
+          <!-- Slot 3: Studio Details & Filmography -->
           <div
             class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-200"
-            onclick="openLightbox('assets/screenshots/09-studio.webp', '03. STUDIO DETAILS (v5.1.1) — Doga Kobo Quick Facts &amp; Timeline Rilis TBA (449 × 1024 HD)')">
+            onclick="openLightbox('assets/screenshots/09-studio.webp', '03. STUDIO DETAILS (v6.1.5) — Doga Kobo Quick Facts &amp; Timeline Rilis TBA (449 × 1024 HD)')">
             <div
               class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-secondary/30 overflow-hidden shadow-lg group-hover:border-secondary/70 transition-all flex flex-col">
               <div
@@ -1079,7 +1131,7 @@
           <!-- Slot 5: Eksplorasi & Discover -->
           <div
             class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-300"
-            onclick="openLightbox('assets/screenshots/03-discover-v511.webp', '05. EKSPLORASI &amp; DISCOVER — Rilisan Musim Ini, Tab Studio &amp; Katalog AniList (449 × 1024 HD)')">
+            onclick="openLightbox('assets/screenshots/03-discover-v511.webp', '05. EKSPLORASI &amp; DISCOVER (v6.1.5) — Inverted Text Highlight Pill &amp; Rilisan Musim Ini (449 × 1024 HD)')">
             <div
               class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
               <div
@@ -1088,7 +1140,7 @@
                 <span class="font-mono text-[7.5px] text-secondary font-semibold flex-shrink-0">MUSIM INI</span>
               </div>
               <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
-                <img alt="Eksplorasi dan Temukan Anime v5.1.1"
+                <img alt="Eksplorasi dan Temukan Anime v6.1.5"
                   class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300"
                   src="assets/screenshots/03-discover-v511-sm.webp" srcset="assets/screenshots/03-discover-v511-sm.webp 360w, assets/screenshots/03-discover-v511.webp 449w" sizes="(max-width: 640px) 240px, 260px" width="360" height="821" loading="lazy" decoding="async">
                 <div
@@ -1102,14 +1154,14 @@
               <div
                 class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">
                 Eksplorasi &amp; Discover</div>
-              <p class="text-[10.5px] text-on-surface-variant leading-tight">Filter musim, tab studio produksi, genre, dan pengacak anime pintar.</p>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Penyorot teks terinversi dinamis, tab studio produksi, dan pencarian populer.</p>
             </div>
           </div>
 
           <!-- Slot 6: Detail Media -->
           <div
             class="w-[240px] sm:w-[260px] flex-shrink-0 snap-center flex flex-col space-y-2 cursor-pointer group reveal-on-scroll delay-100"
-            onclick="openLightbox('assets/screenshots/04-detail.webp', '06. DETAIL MEDIA — Metadata Komprehensif (702 × 1599 HD)')">
+            onclick="openLightbox('assets/screenshots/04-detail.webp', '06. DETAIL MEDIA (v6.1.5) — Transisi Popout Halus, Scroll Memory &amp; Metadata Otoritatif (702 × 1599 HD)')">
             <div
               class="relative aspect-[9/19] rounded-2xl bg-[#0c101a] border border-white/10 overflow-hidden shadow-lg group-hover:border-secondary/60 transition-all flex flex-col">
               <div
@@ -1118,7 +1170,7 @@
                 <span class="font-mono text-[7.5px] text-emerald-400 font-semibold flex-shrink-0">SYNCED</span>
               </div>
               <div class="relative flex-1 w-full overflow-hidden bg-surface-container-lowest">
-                <img alt="Detail Metadata Anime"
+                <img alt="Detail Metadata Anime v6.1.5"
                   class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300"
                   src="assets/screenshots/04-detail-sm.webp" srcset="assets/screenshots/04-detail-sm.webp 360w, assets/screenshots/04-detail.webp 702w" sizes="(max-width: 640px) 240px, 260px" width="360" height="820" loading="lazy" decoding="async">
                 <div
@@ -1132,7 +1184,7 @@
               <div
                 class="text-[12.5px] font-bold text-white leading-tight group-hover:text-secondary transition-colors">
                 Detail Komprehensif</div>
-              <p class="text-[10.5px] text-on-surface-variant leading-tight">Skor MAL, trailer YouTube, sinopsis lengkap, dan ubah status cepat.</p>
+              <p class="text-[10.5px] text-on-surface-variant leading-tight">Popout scaleIn 0.88f, scroll preservation, relasi karya, dan skor MAL.</p>
             </div>
           </div>
 
@@ -1269,10 +1321,10 @@
                 <span>SPESIFIKASI RILIS RESMI</span>
               </div>
               <h2 class="text-[24px] sm:text-[28px] font-black text-white tracking-tight">
-                <span data-sync="filename">canim-universal-release-v5.1.1.apk</span>
+                <span data-sync="filename">canim-universal-release-v6.1.5.apk</span>
               </h2>
               <p class="text-[13px] text-on-surface-variant">
-                Kompilasi universal otomatis GitHub Actions CI/CD dan lolos verifikasi 57 automated unit tests.
+                Kompilasi universal otomatis GitHub Actions CI/CD dan lolos verifikasi 65 automated unit tests.
               </p>
             </div>
 
@@ -1286,7 +1338,7 @@
               <div class="divide-y divide-white/[0.06] font-mono text-[12px]">
                 <div class="py-3 px-4 flex items-center justify-between gap-3">
                   <span class="text-on-surface-variant text-[11px] flex-shrink-0">Versi Rilis</span>
-                  <span class="text-secondary font-bold text-right" data-sync="version">v5.1.1</span>
+                  <span class="text-secondary font-bold text-right" data-sync="version">v6.1.5</span>
                 </div>
                 <div class="py-3 px-4 flex items-center justify-between gap-3 bg-white/[0.01]">
                   <span class="text-on-surface-variant text-[11px] flex-shrink-0">Ukuran Berkas</span>
@@ -1306,7 +1358,7 @@
                 </div>
                 <div class="py-3 px-4 flex items-center justify-between gap-3 bg-white/[0.01]">
                   <span class="text-on-surface-variant text-[11px] flex-shrink-0">Bahasa &amp; UI</span>
-                  <span class="text-emerald-400 font-semibold text-right">Kotlin 2.0.0 + Jetpack Compose M3</span>
+                  <span class="text-emerald-400 font-semibold text-right">Kotlin 1.9.22 + Jetpack Compose M3</span>
                 </div>
                 <div class="py-3 px-4 flex items-center justify-between gap-3">
                   <span class="text-on-surface-variant text-[11px] flex-shrink-0">Keamanan Kredensial</span>
@@ -1328,34 +1380,34 @@
                 <h3 class="text-[17px] font-bold text-white">Pilar Teknologi</h3>
               </div>
               <p class="text-[12.5px] text-on-surface-variant leading-relaxed">
-                Dibangun dengan arsitektur MVVM + StateFlow reaktif murni, Retrofit HTTP/2 connection pooling, Coil
-                asynchronous image loading, dan Gson R8 ProGuard hardened.
+                Dibangun dengan arsitektur Dual-Engine MVVM + StateFlow reaktif, OkHttp Happy Eyeballs RFC 8305, Coil
+                RGB_565 image loading, dan Gson R8 ProGuard hardened.
               </p>
 
               <div class="grid grid-cols-2 gap-2.5 font-mono text-[11px] pt-1">
                 <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
-                  <span class="text-on-surface truncate">GachaCreditManager</span>
+                  <span class="text-on-surface truncate">Dual-Engine Sinergi</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
-                  <span class="text-on-surface truncate">StudioBioRegistry</span>
+                  <span class="text-on-surface truncate">SWR Cache Engine</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
-                  <span class="text-on-surface truncate">StatsExporter Multi-Ratio</span>
+                  <span class="text-on-surface truncate">GachaCredit Anti-Abuse</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
-                  <span class="text-on-surface truncate">AnimeFranchiseFilter</span>
+                  <span class="text-on-surface truncate">Popout Spring Animation</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
-                  <span class="text-on-surface truncate">UpdateChecker 24h</span>
+                  <span class="text-on-surface truncate">FastFallback RFC 8305</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-surface-container border border-white/5 flex items-center gap-2">
                   <span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
-                  <span class="text-on-surface truncate">57 Robolectric Tests</span>
+                  <span class="text-on-surface truncate">65 Robolectric Tests</span>
                 </div>
               </div>
             </div>
@@ -1396,10 +1448,10 @@
 
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto flex-shrink-0">
               <a class="ripple-effect w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-secondary text-[#0a0e17] font-bold text-[13.5px] active:scale-[0.98] transition-transform shadow-lg shadow-secondary/25 hover:brightness-110"
-                href="https://github.com/Kh1zZ/CA-NIM/releases/download/v5.1.1/canim-universal-release-v5.1.1.apk"
+                href="https://github.com/Kh1zZ/CA-NIM/releases/download/v6.1.5/canim-universal-release-v6.1.5.apk"
                 data-sync="download-url" onclick="createRipple(event)" rel="noopener noreferrer" target="_blank">
                 <span class="material-symbols-outlined text-[20px] pointer-events-none">download</span>
-                <span class="pointer-events-none" data-sync="cta-label">Unduh APK v5.1.1 (2.36 MB)</span>
+                <span class="pointer-events-none" data-sync="cta-label">Unduh APK v6.1.5 (2.36 MB)</span>
               </a>
 
               <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-white/10 text-white font-medium text-[13px] transition-colors"
@@ -1486,9 +1538,9 @@
     const CACHE_KEY = 'canim-latest-release';
     const CACHE_TTL = 15 * 60 * 1000; // 15 menit cache
 
-    // Helper: Normalisasi Tag Versi (menghindari vv5.1.1 atau versi tanpa v)
+    // Helper: Normalisasi Tag Versi (menghindari vv6.1.5 atau versi tanpa v)
     function normalizeVersion(tag) {
-      if (!tag) return 'v5.1.1';
+      if (!tag) return 'v6.1.5';
       const clean = String(tag).trim();
       return clean.startsWith('v') || clean.startsWith('V') ? `v${clean.slice(1)}` : `v${clean}`;
     }
@@ -1500,14 +1552,14 @@
       return `${mb.toFixed(2)} MB`;
     }
 
-    // Single Source of Truth State (Known Good Fallback)
+    // Single Source of Truth State (Known Good Fallback v6.1.5)
     let latestRelease = {
-      tagName: 'v5.1.1',
-      version: 'v5.1.1',
-      downloadUrl: 'https://github.com/Kh1zZ/CA-NIM/releases/download/v5.1.1/canim-universal-release-v5.1.1.apk',
-      fileName: 'canim-universal-release-v5.1.1.apk',
+      tagName: 'v6.1.5',
+      version: 'v6.1.5',
+      downloadUrl: 'https://github.com/Kh1zZ/CA-NIM/releases/download/v6.1.5/canim-universal-release-v6.1.5.apk',
+      fileName: 'canim-universal-release-v6.1.5.apk',
       fileSize: '2.36 MB',
-      sha256: 'bae51e6a72c252a54dac8ed6d3f76b26f98bdcb9d985299a4bdcc422033672fe',
+      sha256: 'edcd3a6dee07b420cd51c108c1df8a0a9587fcb8584971208fdb746f02275303',
       isLive: false
     };
 
@@ -1540,13 +1592,18 @@
       const fileSize = apkAsset ? formatFileSize(apkAsset.size) : '2.36 MB';
       const downloadUrl = apkAsset ? apkAsset.browser_download_url : (data.html_url || `https://github.com/${GITHUB_REPO}/releases/latest`);
 
+      // Resolusi Aset Checksum SHA256SUMS.txt
+      const shaAsset = assets.find(a => a.name && (a.name.toLowerCase().includes('sha256') || a.name.toLowerCase().includes('checksum')));
+      const shaDownloadUrl = shaAsset ? shaAsset.browser_download_url : null;
+
       return {
         tagName: data.tag_name,
         version,
         fileName,
         fileSize,
         downloadUrl,
-        sha256: '48bb4bff983ea07d1169095bb1837dd6a0831a962c85626723ded23157ef8c7e',
+        sha256: 'edcd3a6dee07b420cd51c108c1df8a0a9587fcb8584971208fdb746f02275303',
+        shaDownloadUrl,
         publishedAt: data.published_at || null,
         isLive: true
       };
@@ -1622,9 +1679,27 @@
         const parsed = parseReleaseData(data);
         if (parsed) {
           applyReleaseData(parsed);
-          try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({ data: parsed, timestamp: Date.now() }));
-          } catch (e) { }
+
+          // Background Checksum Fetch jika SHA256SUMS.txt tersedia di rilis
+          if (parsed.shaDownloadUrl) {
+            fetch(parsed.shaDownloadUrl)
+              .then(r => r.text())
+              .then(txt => {
+                const match = txt.match(/([a-fA-F0-9]{64})/);
+                if (match && match[1]) {
+                  latestRelease.sha256 = match[1].toLowerCase();
+                  parsed.sha256 = latestRelease.sha256;
+                  try {
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({ data: parsed, timestamp: Date.now() }));
+                  } catch (e) { }
+                }
+              })
+              .catch(() => {});
+          } else {
+            try {
+              localStorage.setItem(CACHE_KEY, JSON.stringify({ data: parsed, timestamp: Date.now() }));
+            } catch (e) { }
+          }
         }
       } catch (error) {
         console.warn('CA\'NIM Live Sync:', error.message, '-> Menggunakan nilai rilis terverifikasi.');
@@ -1828,7 +1903,7 @@
     }
 
     function copyReleaseHash(btn) {
-      const hash = latestRelease.sha256 || 'bae51e6a72c252a54dac8ed6d3f76b26f98bdcb9d985299a4bdcc422033672fe';
+      const hash = latestRelease.sha256 || 'edcd3a6dee07b420cd51c108c1df8a0a9587fcb8584971208fdb746f02275303';
       navigator.clipboard.writeText(hash).then(() => {
         const label = document.getElementById('hash-btn-label');
         const original = label ? label.innerText : '';
