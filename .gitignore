@@ -1,0 +1,11 @@
+# AI agent metadata
+.agents/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node / local scratch
+node_modules/
+*.log
